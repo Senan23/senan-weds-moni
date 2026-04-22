@@ -236,41 +236,28 @@ export default function Reception() {
             clipPath: 'polygon(0% 0%, 100% 0%, 56% 100%, 44% 100%)',
             display: 'flex', justifyContent: 'center', alignItems: 'center',
             paddingBottom: '10px',
-            background: '#fff',
+            background: '#ffffff',
             animation: 'hologram-flicker 3s linear infinite'
           }}>
-            {/* Opacity gradient overlay — more visible at bottom, fading at top */}
+            {/* Opacity gradient overlay — fades top of trapezium into dark background */}
             <div style={{
               position: 'absolute', inset: 0,
               background: 'linear-gradient(to top, transparent 0%, transparent 30%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0.7) 85%, rgba(0,0,0,0.92) 100%)',
               pointerEvents: 'none', zIndex: 5
             }} />
 
-            {/* Holographic scanline overlay */}
-            <div style={{
-              position: 'absolute', inset: 0, zIndex: 6, pointerEvents: 'none',
-              background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(100,180,255,0.03) 2px, rgba(100,180,255,0.03) 4px)',
-              mixBlendMode: 'screen'
-            }} />
-
-            {/* Edge glow — faint blue on sides */}
-            <div style={{
-              position: 'absolute', inset: 0, zIndex: 6, pointerEvents: 'none',
-              background: 'linear-gradient(90deg, rgba(100,180,255,0.08) 0%, transparent 10%, transparent 90%, rgba(100,180,255,0.08) 100%)'
-            }} />
-
-            {/* Blue holographic tint at bottom */}
-            <div style={{
-              position: 'absolute', inset: 0, zIndex: 6, pointerEvents: 'none',
-              background: 'linear-gradient(to top, rgba(100,180,255,0.12) 0%, rgba(100,180,255,0.04) 25%, transparent 50%)'
-            }} />
-
-            {/* Canvas — centered with white background */}
+            {/* Canvas — same white background as trapezium, all effects inside */}
             <div style={{
               position: 'relative', zIndex: 1,
               overflow: 'hidden',
-              background: '#fff'
+              background: '#ffffff'
             }}>
+              {/* Holographic scanline overlay — inside canvas only */}
+              <div style={{
+                position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none',
+                background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(100,180,255,0.03) 2px, rgba(100,180,255,0.03) 4px)',
+                mixBlendMode: 'screen'
+              }} />
               {/* Holographic brightness layer */}
               <div style={{
                 position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
