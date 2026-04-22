@@ -335,7 +335,7 @@ export default function Reception() {
             fontFamily: "'Montserrat', sans-serif", letterSpacing: '3px',
             textTransform: 'uppercase',
             textShadow: '0 0 8px rgba(200, 220, 255, 0.2)'
-          }}>Keep Swiping</span>
+          }}>Keep Swiping Down</span>
           <svg width="20" height="20" viewBox="0 0 24 24" style={{ animation: 'scroll-bounce 1.5s ease-in-out infinite' }}>
             <path d="M7 10l5 5 5-5" fill="none" stroke="rgba(200, 220, 255, 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>

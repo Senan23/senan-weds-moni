@@ -500,11 +500,12 @@ export default function LetterDrop({ onComplete, onFlipComplete }) {
           </div>
         </div>
 
-        {/* Scroll Down Indicator — visible until letter lands */}
+        {/* Swipe Down Indicator — fixed at bottom center, visible until letter lands */}
         {!letterLanded && (
           <div ref={scrollIndicatorRef}
-            className="absolute bottom-4 left-0 right-0 flex flex-col items-center z-30 pointer-events-none">
-            <span style={{ fontSize: '11px', color: '#999', fontFamily: "'Montserrat', sans-serif", letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '4px' }}>Swipe Down</span>
+            className="fixed bottom-6 left-1/2 flex flex-col items-center z-50 pointer-events-none"
+            style={{ transform: 'translateX(-50%)' }}>
+            <span style={{ fontSize: '12px', color: '#999', fontFamily: "'Montserrat', sans-serif", letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '4px', fontWeight: '600' }}>SWIPE DOWN</span>
             <svg width="20" height="20" viewBox="0 0 24 24" style={{ animation: 'scroll-bounce 1.5s ease-in-out infinite' }}>
               <path d="M7 10l5 5 5-5" fill="none" stroke="#999" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
