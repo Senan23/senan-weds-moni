@@ -60,31 +60,10 @@ export default function Reception() {
     }
   }, []);
 
-  // Background removal helper — makes dark/background pixels transparent
-  const drawWithBgRemoval = (ctx, img, w, h) => {
+  // Draw frame directly (white background via CSS container)
+  const drawFrame = (ctx, img, w, h) => {
     ctx.clearRect(0, 0, w, h);
     ctx.drawImage(img, 0, 0, w, h);
-    const imageData = ctx.getImageData(0, 0, w, h);
-    const d = imageData.data;
-    for (let i = 0; i < d.length; i += 4) {
-      const r = d[i], g = d[i + 1], b = d[i + 2];
-      // Calculate luminance
-      const lum = 0.299 * r + 0.587 * g + 0.114 * b;
-      if (lum < 50) {
-        // Very dark pixels — fully transparent
-        d[i + 3] = 0;
-      } else if (lum < 100) {
-        // Semi-dark — fade alpha based on luminance
-        d[i + 3] = Math.round(((lum - 50) / 50) * 255);
-      }
-      // Boost brightness slightly for remaining pixels to glow
-      if (d[i + 3] > 0) {
-        d[i] = Math.min(255, r + 15);
-        d[i + 1] = Math.min(255, g + 15);
-        d[i + 2] = Math.min(255, b + 15);
-      }
-    }
-    ctx.putImageData(imageData, 0, 0);
   };
 
   // Canvas sequence ScrollTrigger
@@ -97,7 +76,7 @@ export default function Reception() {
       const firstImg = imagesRef.current[0];
       canvas.width = firstImg.naturalWidth;
       canvas.height = firstImg.naturalHeight;
-      drawWithBgRemoval(ctx, firstImg, canvas.width, canvas.height);
+      drawFrame(ctx, firstImg, canvas.width, canvas.height);
 
       const obj = { frame: 0 };
       const st = gsap.to(obj, {
@@ -115,7 +94,7 @@ export default function Reception() {
           setCurrentFrame(idx);
           const img = imagesRef.current[idx];
           if (img && img.complete) {
-            drawWithBgRemoval(ctx, img, canvas.width, canvas.height);
+            drawFrame(ctx, img, canvas.width, canvas.height);
           }
         }
       });
@@ -234,7 +213,7 @@ export default function Reception() {
             clipPath: 'polygon(0% 0%, 100% 0%, 65% 100%, 35% 100%)',
             display: 'flex', justifyContent: 'center', alignItems: 'center',
             paddingBottom: '10px',
-            background: 'linear-gradient(165deg, #060d1f 0%, #0b1630 20%, #081022 40%, #0d1a35 60%, #091328 80%, #060d1f 100%)'
+            background: 'linear-gradient(to top, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.5) 20%, rgba(255,255,255,0.2) 45%, rgba(255,255,255,0.05) 70%, transparent 100%)'
           }}>
             {/* Subtle beam edges — faint glow along trapezium sides */}
             <div style={{
@@ -242,17 +221,12 @@ export default function Reception() {
               background: 'linear-gradient(90deg, rgba(200, 220, 255, 0.04) 0%, transparent 8%, transparent 92%, rgba(200, 220, 255, 0.04) 100%)',
               pointerEvents: 'none', zIndex: 0
             }} />
-            {/* Bottom-to-top illumination — bright near sphere, fading upward */}
-            <div style={{
-              position: 'absolute', inset: 0,
-              background: 'linear-gradient(to top, rgba(200, 220, 255, 0.12) 0%, rgba(200, 220, 255, 0.06) 15%, rgba(200, 220, 255, 0.02) 40%, transparent 70%)',
-              pointerEvents: 'none', zIndex: 0
-            }} />
 
-            {/* Canvas — holographic look */}
+            {/* Canvas — with white background restored */}
             <div style={{
               position: 'relative', zIndex: 1,
-              overflow: 'hidden'
+              overflow: 'hidden',
+              background: '#fff'
             }}>
               {/* Holographic scanline overlay */}
               <div style={{
@@ -264,8 +238,7 @@ export default function Reception() {
                 display: 'block',
                 maxWidth: '65vw', maxHeight: '45vh',
                 width: '100%', height: 'auto',
-                filter: 'brightness(1.15) contrast(1.05) saturate(0.85)',
-                opacity: 0.75
+                opacity: 1
               }} />
             </div>
           </div>
