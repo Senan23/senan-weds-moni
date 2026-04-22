@@ -60,6 +60,33 @@ export default function Reception() {
     }
   }, []);
 
+  // Background removal helper — makes dark/background pixels transparent
+  const drawWithBgRemoval = (ctx, img, w, h) => {
+    ctx.clearRect(0, 0, w, h);
+    ctx.drawImage(img, 0, 0, w, h);
+    const imageData = ctx.getImageData(0, 0, w, h);
+    const d = imageData.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const r = d[i], g = d[i + 1], b = d[i + 2];
+      // Calculate luminance
+      const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+      if (lum < 50) {
+        // Very dark pixels — fully transparent
+        d[i + 3] = 0;
+      } else if (lum < 100) {
+        // Semi-dark — fade alpha based on luminance
+        d[i + 3] = Math.round(((lum - 50) / 50) * 255);
+      }
+      // Boost brightness slightly for remaining pixels to glow
+      if (d[i + 3] > 0) {
+        d[i] = Math.min(255, r + 15);
+        d[i + 1] = Math.min(255, g + 15);
+        d[i + 2] = Math.min(255, b + 15);
+      }
+    }
+    ctx.putImageData(imageData, 0, 0);
+  };
+
   // Canvas sequence ScrollTrigger
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -70,7 +97,7 @@ export default function Reception() {
       const firstImg = imagesRef.current[0];
       canvas.width = firstImg.naturalWidth;
       canvas.height = firstImg.naturalHeight;
-      ctx.drawImage(firstImg, 0, 0);
+      drawWithBgRemoval(ctx, firstImg, canvas.width, canvas.height);
 
       const obj = { frame: 0 };
       const st = gsap.to(obj, {
@@ -88,8 +115,7 @@ export default function Reception() {
           setCurrentFrame(idx);
           const img = imagesRef.current[idx];
           if (img && img.complete) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            drawWithBgRemoval(ctx, img, canvas.width, canvas.height);
           }
         }
       });
@@ -216,6 +242,12 @@ export default function Reception() {
               background: 'linear-gradient(90deg, rgba(200, 220, 255, 0.04) 0%, transparent 8%, transparent 92%, rgba(200, 220, 255, 0.04) 100%)',
               pointerEvents: 'none', zIndex: 0
             }} />
+            {/* Bottom-to-top illumination — bright near sphere, fading upward */}
+            <div style={{
+              position: 'absolute', inset: 0,
+              background: 'linear-gradient(to top, rgba(200, 220, 255, 0.12) 0%, rgba(200, 220, 255, 0.06) 15%, rgba(200, 220, 255, 0.02) 40%, transparent 70%)',
+              pointerEvents: 'none', zIndex: 0
+            }} />
 
             {/* Canvas — holographic look */}
             <div style={{
@@ -239,12 +271,12 @@ export default function Reception() {
             </div>
           </div>
 
-          {/* Convergence point glow — where trapezium meets the sphere */}
+          {/* Convergence point glow — bright illumination at sphere top */}
           <div style={{
-            width: '50px', height: '6px',
-            background: 'radial-gradient(ellipse, rgba(200, 220, 255, 0.6) 0%, transparent 70%)',
-            filter: 'blur(3px)',
-            marginTop: '-4px', zIndex: 3, pointerEvents: 'none'
+            width: '80px', height: '14px',
+            background: 'radial-gradient(ellipse, rgba(200, 220, 255, 0.7) 0%, rgba(200, 220, 255, 0.3) 40%, transparent 70%)',
+            filter: 'blur(5px)',
+            marginTop: '-8px', zIndex: 3, pointerEvents: 'none'
           }} />
 
           {/* Silver titanium sphere — the hologram projector */}
