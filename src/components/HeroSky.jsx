@@ -388,10 +388,9 @@ export default function HeroSky() {
         </div>
       </div>
 
-      {/* Scroll Down Indicator */}
+      {/* Scroll Down Indicator — fixed at bottom center */}
       <div ref={scrollIndicatorRef}
-        className="absolute bottom-6 left-1/2 flex flex-col items-center z-30 pointer-events-none"
-        style={{ transform: 'translateX(-50%)', opacity: 0, transition: 'opacity 0.6s ease' }}>
+        style={{ position: 'fixed', bottom: '24px', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 50, pointerEvents: 'none', opacity: 0, transition: 'opacity 0.6s ease', textAlign: 'center' }}>
         <span style={{ fontSize: '13px', color: '#fff', fontFamily: "'Montserrat', sans-serif", letterSpacing: '3px', textTransform: 'uppercase', textShadow: '0 1px 4px rgba(0,0,0,0.4)', marginBottom: '6px', fontWeight: '600' }}>SWIPE DOWN</span>
         <svg width="24" height="24" viewBox="0 0 24 24" style={{ animation: 'scroll-bounce 1.5s ease-in-out infinite' }}>
           <path d="M7 10l5 5 5-5" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.4))' }} />

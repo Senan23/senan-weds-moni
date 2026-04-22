@@ -46,6 +46,29 @@ export default function Reception() {
         0%, 100% { transform: translateY(0); opacity: 1; }
         50% { transform: translateY(8px); opacity: 0.4; }
       }
+      @keyframes hologram-flicker {
+        0% { opacity: 0.92; }
+        5% { opacity: 0.88; }
+        10% { opacity: 0.95; }
+        15% { opacity: 0.78; }
+        20% { opacity: 0.96; }
+        25% { opacity: 0.9; }
+        30% { opacity: 0.85; }
+        35% { opacity: 0.97; }
+        40% { opacity: 0.75; }
+        42% { opacity: 0.94; }
+        50% { opacity: 0.92; }
+        55% { opacity: 0.98; }
+        60% { opacity: 0.82; }
+        65% { opacity: 0.95; }
+        70% { opacity: 0.88; }
+        75% { opacity: 0.93; }
+        80% { opacity: 0.72; }
+        82% { opacity: 0.96; }
+        90% { opacity: 0.9; }
+        95% { opacity: 0.85; }
+        100% { opacity: 0.92; }
+      }
     `;
     document.head.appendChild(style);
     return () => document.head.removeChild(style);
@@ -213,7 +236,8 @@ export default function Reception() {
             clipPath: 'polygon(0% 0%, 100% 0%, 65% 100%, 35% 100%)',
             display: 'flex', justifyContent: 'center', alignItems: 'center',
             paddingBottom: '10px',
-            background: '#fff'
+            background: '#fff',
+            animation: 'hologram-flicker 3s linear infinite'
           }}>
             {/* Opacity gradient overlay — more visible at bottom, fading at top */}
             <div style={{
@@ -228,14 +252,32 @@ export default function Reception() {
               overflow: 'hidden',
               background: '#fff'
             }}>
+              {/* Holographic brightness layer — makes characters glow */}
+              <div style={{
+                position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
+                background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.35) 0%, rgba(200,230,255,0.15) 40%, transparent 70%)',
+                mixBlendMode: 'overlay'
+              }} />
               <canvas ref={canvasRef} style={{
                 display: 'block',
                 maxWidth: '65vw', maxHeight: '45vh',
                 width: '100%', height: 'auto',
-                opacity: 1
+                opacity: 1,
+                filter: 'brightness(1.15) contrast(1.05)'
               }} />
             </div>
           </div>
+
+          {/* White triangle connecting trapezium bottom to reactor center — flickers with trapezium */}
+          <div style={{
+            width: '0', height: '0',
+            borderLeft: '48px solid transparent',
+            borderRight: '48px solid transparent',
+            borderTop: '40px solid #fff',
+            marginTop: '-1px',
+            zIndex: 3, pointerEvents: 'none',
+            animation: 'hologram-flicker 3s linear infinite'
+          }} />
 
           {/* Convergence point glow — bright illumination at reactor top */}
           <div style={{
