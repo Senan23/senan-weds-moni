@@ -229,11 +229,11 @@ export default function Reception() {
           width: '100%', maxWidth: '500px'
         }}>
 
-          {/* Trapezium projection area — narrow at bottom (sphere), expanding to full canvas width at top (torch) */}
+          {/* Trapezium projection area — bottom edge touches reactor top */}
           <div style={{
             position: 'relative',
             width: '100%',
-            clipPath: 'polygon(0% 0%, 100% 0%, 65% 100%, 35% 100%)',
+            clipPath: 'polygon(0% 0%, 100% 0%, 56% 100%, 44% 100%)',
             display: 'flex', justifyContent: 'center', alignItems: 'center',
             paddingBottom: '10px',
             background: '#fff',
@@ -246,13 +246,32 @@ export default function Reception() {
               pointerEvents: 'none', zIndex: 5
             }} />
 
-            {/* Canvas — with white background */}
+            {/* Holographic scanline overlay */}
+            <div style={{
+              position: 'absolute', inset: 0, zIndex: 6, pointerEvents: 'none',
+              background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(100,180,255,0.03) 2px, rgba(100,180,255,0.03) 4px)',
+              mixBlendMode: 'screen'
+            }} />
+
+            {/* Edge glow — faint blue on sides */}
+            <div style={{
+              position: 'absolute', inset: 0, zIndex: 6, pointerEvents: 'none',
+              background: 'linear-gradient(90deg, rgba(100,180,255,0.08) 0%, transparent 10%, transparent 90%, rgba(100,180,255,0.08) 100%)'
+            }} />
+
+            {/* Blue holographic tint at bottom */}
+            <div style={{
+              position: 'absolute', inset: 0, zIndex: 6, pointerEvents: 'none',
+              background: 'linear-gradient(to top, rgba(100,180,255,0.12) 0%, rgba(100,180,255,0.04) 25%, transparent 50%)'
+            }} />
+
+            {/* Canvas — centered with white background */}
             <div style={{
               position: 'relative', zIndex: 1,
               overflow: 'hidden',
               background: '#fff'
             }}>
-              {/* Holographic brightness layer — makes characters glow */}
+              {/* Holographic brightness layer */}
               <div style={{
                 position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
                 background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.35) 0%, rgba(200,230,255,0.15) 40%, transparent 70%)',
@@ -268,28 +287,17 @@ export default function Reception() {
             </div>
           </div>
 
-          {/* White triangle connecting trapezium bottom to reactor center — flickers with trapezium */}
-          <div style={{
-            width: '0', height: '0',
-            borderLeft: '48px solid transparent',
-            borderRight: '48px solid transparent',
-            borderTop: '40px solid #fff',
-            marginTop: '-1px',
-            zIndex: 3, pointerEvents: 'none',
-            animation: 'hologram-flicker 3s linear infinite'
-          }} />
-
           {/* Convergence point glow — bright illumination at reactor top */}
           <div style={{
             width: '80px', height: '14px',
             background: 'radial-gradient(ellipse, rgba(100, 180, 255, 0.7) 0%, rgba(100, 180, 255, 0.3) 40%, transparent 70%)',
             filter: 'blur(5px)',
-            marginTop: '-8px', zIndex: 3, pointerEvents: 'none'
+            marginTop: '-10px', zIndex: 3, pointerEvents: 'none'
           }} />
 
           {/* Arc Reactor sphere — Iron Man style hologram projector */}
           <div style={{
-            marginTop: '4px',
+            marginTop: '-2px',
             width: '60px', height: '60px',
             borderRadius: '50%',
             background: 'radial-gradient(circle, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #1a1a2e 100%)',
