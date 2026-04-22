@@ -207,12 +207,13 @@ export default function Reception() {
             width: '100%',
             clipPath: 'polygon(0% 0%, 100% 0%, 65% 100%, 35% 100%)',
             display: 'flex', justifyContent: 'center', alignItems: 'center',
-            paddingBottom: '10px'
+            paddingBottom: '10px',
+            background: 'linear-gradient(165deg, #060d1f 0%, #0b1630 20%, #081022 40%, #0d1a35 60%, #091328 80%, #060d1f 100%)'
           }}>
-            {/* Projection beam glow (behind the canvas) */}
+            {/* Subtle beam edges — faint glow along trapezium sides */}
             <div style={{
               position: 'absolute', inset: 0,
-              background: 'linear-gradient(to bottom, rgba(200, 220, 255, 0.04) 0%, rgba(200, 220, 255, 0.02) 50%, rgba(200, 220, 255, 0.06) 100%)',
+              background: 'linear-gradient(90deg, rgba(200, 220, 255, 0.04) 0%, transparent 8%, transparent 92%, rgba(200, 220, 255, 0.04) 100%)',
               pointerEvents: 'none', zIndex: 0
             }} />
 
