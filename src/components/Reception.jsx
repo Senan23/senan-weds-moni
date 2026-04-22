@@ -265,8 +265,7 @@ export default function Reception() {
                 maxWidth: '65vw', maxHeight: '45vh',
                 width: '100%', height: 'auto',
                 filter: 'brightness(1.15) contrast(1.05) saturate(0.85)',
-                opacity: 0.55,
-                mixBlendMode: 'screen'
+                opacity: 0.75
               }} />
             </div>
           </div>
