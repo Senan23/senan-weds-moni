@@ -213,27 +213,21 @@ export default function Reception() {
             clipPath: 'polygon(0% 0%, 100% 0%, 65% 100%, 35% 100%)',
             display: 'flex', justifyContent: 'center', alignItems: 'center',
             paddingBottom: '10px',
-            background: 'linear-gradient(to top, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.5) 20%, rgba(255,255,255,0.2) 45%, rgba(255,255,255,0.05) 70%, transparent 100%)'
+            background: '#fff'
           }}>
-            {/* Subtle beam edges — faint glow along trapezium sides */}
+            {/* Opacity gradient overlay — more visible at bottom, fading at top */}
             <div style={{
               position: 'absolute', inset: 0,
-              background: 'linear-gradient(90deg, rgba(200, 220, 255, 0.04) 0%, transparent 8%, transparent 92%, rgba(200, 220, 255, 0.04) 100%)',
-              pointerEvents: 'none', zIndex: 0
+              background: 'linear-gradient(to top, transparent 0%, transparent 30%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0.7) 85%, rgba(0,0,0,0.92) 100%)',
+              pointerEvents: 'none', zIndex: 5
             }} />
 
-            {/* Canvas — with white background restored */}
+            {/* Canvas — with white background */}
             <div style={{
               position: 'relative', zIndex: 1,
               overflow: 'hidden',
               background: '#fff'
             }}>
-              {/* Holographic scanline overlay */}
-              <div style={{
-                position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
-                background: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(200, 220, 255, 0.03) 3px, rgba(200, 220, 255, 0.03) 4px)',
-                mixBlendMode: 'screen'
-              }} />
               <canvas ref={canvasRef} style={{
                 display: 'block',
                 maxWidth: '65vw', maxHeight: '45vh',
@@ -243,56 +237,127 @@ export default function Reception() {
             </div>
           </div>
 
-          {/* Convergence point glow — bright illumination at sphere top */}
+          {/* Convergence point glow — bright illumination at reactor top */}
           <div style={{
             width: '80px', height: '14px',
-            background: 'radial-gradient(ellipse, rgba(200, 220, 255, 0.7) 0%, rgba(200, 220, 255, 0.3) 40%, transparent 70%)',
+            background: 'radial-gradient(ellipse, rgba(100, 180, 255, 0.7) 0%, rgba(100, 180, 255, 0.3) 40%, transparent 70%)',
             filter: 'blur(5px)',
             marginTop: '-8px', zIndex: 3, pointerEvents: 'none'
           }} />
 
-          {/* Silver titanium sphere — the hologram projector */}
+          {/* Arc Reactor sphere — Iron Man style hologram projector */}
           <div style={{
             marginTop: '4px',
-            width: '50px', height: '50px',
+            width: '60px', height: '60px',
             borderRadius: '50%',
-            background: 'radial-gradient(circle at 30% 30%, #f0f0f0 0%, #c0c0c0 25%, #909090 50%, #606060 75%, #404040 100%)',
-            boxShadow: '0 0 20px rgba(200, 220, 255, 0.35), 0 0 40px rgba(200, 220, 255, 0.15), 0 4px 12px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.4), inset 0 -3px 6px rgba(0,0,0,0.3)',
+            background: 'radial-gradient(circle, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #1a1a2e 100%)',
+            boxShadow: '0 0 25px rgba(100, 180, 255, 0.5), 0 0 50px rgba(100, 180, 255, 0.2), 0 0 80px rgba(100, 180, 255, 0.1), 0 4px 12px rgba(0,0,0,0.6), inset 0 0 15px rgba(100, 180, 255, 0.15)',
             position: 'relative',
-            zIndex: 4
+            zIndex: 4,
+            border: '2px solid rgba(100, 180, 255, 0.3)'
           }}>
-            {/* Titanium sheen highlight */}
+            {/* Outer ring */}
             <div style={{
-              position: 'absolute', top: '6px', left: '10px',
-              width: '14px', height: '8px',
+              position: 'absolute', inset: '3px',
               borderRadius: '50%',
-              background: 'rgba(255,255,255,0.5)',
-              filter: 'blur(3px)',
-              pointerEvents: 'none'
+              border: '2px solid rgba(100, 180, 255, 0.5)',
+              boxShadow: '0 0 6px rgba(100, 180, 255, 0.3), inset 0 0 6px rgba(100, 180, 255, 0.2)'
+            }} />
+            {/* Middle ring */}
+            <div style={{
+              position: 'absolute', inset: '9px',
+              borderRadius: '50%',
+              border: '1.5px solid rgba(100, 180, 255, 0.4)',
+              boxShadow: '0 0 4px rgba(100, 180, 255, 0.2), inset 0 0 4px rgba(100, 180, 255, 0.15)'
             }} />
             {/* Inner ring */}
             <div style={{
-              position: 'absolute', inset: '6px',
+              position: 'absolute', inset: '14px',
               borderRadius: '50%',
-              border: '1px solid rgba(255,255,255,0.2)',
-              boxShadow: 'inset 0 0 8px rgba(200,220,255,0.15)'
+              border: '1px solid rgba(100, 180, 255, 0.35)',
+              boxShadow: 'inset 0 0 8px rgba(100, 180, 255, 0.25)'
             }} />
-            {/* Core light emitter */}
+            {/* Core — bright blue center */}
             <div style={{
               position: 'absolute', top: '50%', left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: '10px', height: '10px',
+              width: '14px', height: '14px',
               borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(200,220,255,0.8) 0%, rgba(200,220,255,0.2) 60%, transparent 100%)',
+              background: 'radial-gradient(circle, rgba(180,220,255,0.95) 0%, rgba(100,180,255,0.7) 40%, rgba(60,140,255,0.3) 70%, transparent 100%)',
+              boxShadow: '0 0 10px rgba(100, 180, 255, 0.8), 0 0 20px rgba(100, 180, 255, 0.4)',
               animation: 'reception-star-twinkle 2s ease-in-out infinite'
             }} />
-            {/* Upward beam from sphere top */}
+            {/* Reactor spoke — top */}
             <div style={{
-              position: 'absolute', top: '-10px', left: '50%',
+              position: 'absolute', top: '7px', left: '50%',
               transform: 'translateX(-50%)',
-              width: '6px', height: '12px',
-              background: 'linear-gradient(to top, rgba(200,220,255,0.5), transparent)',
-              borderRadius: '3px', filter: 'blur(2px)',
+              width: '2px', height: '10px',
+              background: 'linear-gradient(to bottom, rgba(100,180,255,0.6), rgba(100,180,255,0.15))',
+              borderRadius: '1px'
+            }} />
+            {/* Reactor spoke — bottom */}
+            <div style={{
+              position: 'absolute', bottom: '7px', left: '50%',
+              transform: 'translateX(-50%)',
+              width: '2px', height: '10px',
+              background: 'linear-gradient(to top, rgba(100,180,255,0.6), rgba(100,180,255,0.15))',
+              borderRadius: '1px'
+            }} />
+            {/* Reactor spoke — left */}
+            <div style={{
+              position: 'absolute', left: '7px', top: '50%',
+              transform: 'translateY(-50%)',
+              width: '10px', height: '2px',
+              background: 'linear-gradient(to right, rgba(100,180,255,0.6), rgba(100,180,255,0.15))',
+              borderRadius: '1px'
+            }} />
+            {/* Reactor spoke — right */}
+            <div style={{
+              position: 'absolute', right: '7px', top: '50%',
+              transform: 'translateY(-50%)',
+              width: '10px', height: '2px',
+              background: 'linear-gradient(to left, rgba(100,180,255,0.6), rgba(100,180,255,0.15))',
+              borderRadius: '1px'
+            }} />
+            {/* Reactor spoke — top-right diagonal */}
+            <div style={{
+              position: 'absolute', top: '10px', right: '10px',
+              width: '2px', height: '9px',
+              background: 'linear-gradient(to bottom, rgba(100,180,255,0.5), rgba(100,180,255,0.1))',
+              borderRadius: '1px',
+              transform: 'rotate(-45deg)'
+            }} />
+            {/* Reactor spoke — top-left diagonal */}
+            <div style={{
+              position: 'absolute', top: '10px', left: '10px',
+              width: '2px', height: '9px',
+              background: 'linear-gradient(to bottom, rgba(100,180,255,0.5), rgba(100,180,255,0.1))',
+              borderRadius: '1px',
+              transform: 'rotate(45deg)'
+            }} />
+            {/* Reactor spoke — bottom-right diagonal */}
+            <div style={{
+              position: 'absolute', bottom: '10px', right: '10px',
+              width: '2px', height: '9px',
+              background: 'linear-gradient(to top, rgba(100,180,255,0.5), rgba(100,180,255,0.1))',
+              borderRadius: '1px',
+              transform: 'rotate(45deg)'
+            }} />
+            {/* Reactor spoke — bottom-left diagonal */}
+            <div style={{
+              position: 'absolute', bottom: '10px', left: '10px',
+              width: '2px', height: '9px',
+              background: 'linear-gradient(to top, rgba(100,180,255,0.5), rgba(100,180,255,0.1))',
+              borderRadius: '1px',
+              transform: 'rotate(-45deg)'
+            }} />
+            {/* Upward beam from reactor top */}
+            <div style={{
+              position: 'absolute', top: '-12px', left: '50%',
+              transform: 'translateX(-50%)',
+              width: '8px', height: '14px',
+              background: 'linear-gradient(to top, rgba(100,180,255,0.6), transparent)',
+              borderRadius: '4px', filter: 'blur(3px)',
               pointerEvents: 'none'
             }} />
           </div>
