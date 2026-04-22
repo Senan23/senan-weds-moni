@@ -517,7 +517,14 @@ export default function LetterDrop({ onComplete, onFlipComplete }) {
     {/* ══ FULLSCREEN COVER — triangular flaps turning like pages ══ */}
     {showCover && (
       <div ref={coverContainerRef} className="fixed inset-0 z-50"
-        style={{ overflow: 'hidden', perspective: '1200px', background: '#FFF8E7' }}>
+        style={{ overflow: 'hidden', perspective: '1200px', background: '#800000' }}>
+
+        {/* Maroon fullscreen with golden borders — visible before flaps open */}
+        <div className="absolute inset-0" style={{ background: '#800000', zIndex: 0 }}>
+          <div className="absolute inset-0" style={{ border: '3px solid #D4AF37', margin: '16px', borderRadius: '8px' }}>
+            <div className="absolute inset-0" style={{ border: '1px solid rgba(212,175,55,0.4)', margin: '6px', borderRadius: '5px' }} />
+          </div>
+        </div>
 
         {/* Back page — sits behind the front page */}
         <div className="absolute inset-0 flex items-center justify-center" style={{
@@ -596,7 +603,7 @@ export default function LetterDrop({ onComplete, onFlipComplete }) {
                 color: '#1a1a5e', cursor: 'pointer', marginTop: '28px',
                 animation: 'pulse-gold 2s ease-in-out infinite'
               }}>
-              Click Here
+              Click To Flip
             </div>
           </div>
         </div>

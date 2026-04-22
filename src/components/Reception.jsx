@@ -47,27 +47,47 @@ export default function Reception() {
         50% { transform: translateY(8px); opacity: 0.4; }
       }
       @keyframes hologram-flicker {
-        0% { opacity: 0.92; }
-        5% { opacity: 0.88; }
+        0% { opacity: 0.88; }
+        3% { opacity: 0.55; }
+        5% { opacity: 0.92; }
+        8% { opacity: 0.7; }
         10% { opacity: 0.95; }
-        15% { opacity: 0.78; }
+        12% { opacity: 0.5; }
+        14% { opacity: 0.9; }
+        18% { opacity: 0.78; }
         20% { opacity: 0.96; }
-        25% { opacity: 0.9; }
-        30% { opacity: 0.85; }
+        22% { opacity: 0.6; }
+        25% { opacity: 0.93; }
+        28% { opacity: 0.85; }
+        30% { opacity: 0.45; }
+        32% { opacity: 0.92; }
         35% { opacity: 0.97; }
-        40% { opacity: 0.75; }
-        42% { opacity: 0.94; }
-        50% { opacity: 0.92; }
+        38% { opacity: 0.72; }
+        40% { opacity: 0.88; }
+        42% { opacity: 0.55; }
+        45% { opacity: 0.95; }
+        48% { opacity: 0.82; }
+        50% { opacity: 0.5; }
+        52% { opacity: 0.93; }
         55% { opacity: 0.98; }
-        60% { opacity: 0.82; }
-        65% { opacity: 0.95; }
-        70% { opacity: 0.88; }
-        75% { opacity: 0.93; }
-        80% { opacity: 0.72; }
-        82% { opacity: 0.96; }
-        90% { opacity: 0.9; }
-        95% { opacity: 0.85; }
-        100% { opacity: 0.92; }
+        58% { opacity: 0.65; }
+        60% { opacity: 0.9; }
+        62% { opacity: 0.78; }
+        65% { opacity: 0.48; }
+        67% { opacity: 0.94; }
+        70% { opacity: 0.85; }
+        73% { opacity: 0.6; }
+        75% { opacity: 0.92; }
+        78% { opacity: 0.75; }
+        80% { opacity: 0.97; }
+        82% { opacity: 0.52; }
+        85% { opacity: 0.9; }
+        88% { opacity: 0.82; }
+        90% { opacity: 0.58; }
+        92% { opacity: 0.95; }
+        95% { opacity: 0.7; }
+        98% { opacity: 0.88; }
+        100% { opacity: 0.88; }
       }
     `;
     document.head.appendChild(style);
@@ -431,7 +451,7 @@ export default function Reception() {
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
           opacity: 0
         }}>
-          ~ 29th May 2026 ~ 7 PM Onwards ~
+          ~ 29th May 2026 ~<br />~ 7 PM Onwards ~
         </div>
       </div>
 
@@ -441,7 +461,7 @@ export default function Reception() {
         padding: '0 20px',
         marginTop: '-40px'
       }}>
-        <div style={{ height: '40px' }} />
+        <div style={{ height: '20px' }} />
         <div style={{
           fontFamily: "'Great Vibes', cursive", fontSize: '42px',
           background: 'linear-gradient(180deg, #ffffff 0%, #c8c8c8 40%, #e8e8e8 60%, #b0b0b0 100%)',
@@ -450,7 +470,7 @@ export default function Reception() {
         }}>
           Wedding Reception
         </div>
-        <div style={{ height: '40px' }} />
+        <div style={{ height: '20px' }} />
       </div>
 
       {/* ═══ SECTION 3: Google Maps + 3D Palace ═══ */}
