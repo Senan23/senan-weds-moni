@@ -246,30 +246,15 @@ export default function Reception() {
               pointerEvents: 'none', zIndex: 5
             }} />
 
-            {/* Canvas — same white background as trapezium, all effects inside */}
+            {/* Canvas — same white background as trapezium */}
             <div style={{
               position: 'relative', zIndex: 1,
-              overflow: 'hidden',
-              background: '#ffffff'
+              overflow: 'hidden'
             }}>
-              {/* Holographic scanline overlay — inside canvas only */}
-              <div style={{
-                position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none',
-                background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(100,180,255,0.03) 2px, rgba(100,180,255,0.03) 4px)',
-                mixBlendMode: 'screen'
-              }} />
-              {/* Holographic brightness layer */}
-              <div style={{
-                position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
-                background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.35) 0%, rgba(200,230,255,0.15) 40%, transparent 70%)',
-                mixBlendMode: 'overlay'
-              }} />
               <canvas ref={canvasRef} style={{
                 display: 'block',
                 maxWidth: '65vw', maxHeight: '45vh',
-                width: '100%', height: 'auto',
-                opacity: 1,
-                filter: 'brightness(1.15) contrast(1.05)'
+                width: '100%', height: 'auto'
               }} />
             </div>
           </div>
@@ -448,6 +433,24 @@ export default function Reception() {
         }}>
           ~ 29th May 2026 ~ 7 PM Onwards ~
         </div>
+      </div>
+
+      {/* "Wedding Reception" heading */}
+      <div style={{
+        textAlign: 'center',
+        padding: '0 20px',
+        marginTop: '-40px'
+      }}>
+        <div style={{ height: '40px' }} />
+        <div style={{
+          fontFamily: "'Great Vibes', cursive", fontSize: '42px',
+          background: 'linear-gradient(180deg, #ffffff 0%, #c8c8c8 40%, #e8e8e8 60%, #b0b0b0 100%)',
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+          filter: 'drop-shadow(0 0 8px rgba(192,192,192,0.25))'
+        }}>
+          Wedding Reception
+        </div>
+        <div style={{ height: '40px' }} />
       </div>
 
       {/* ═══ SECTION 3: Google Maps + 3D Palace ═══ */}
