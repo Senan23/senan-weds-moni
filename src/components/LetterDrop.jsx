@@ -229,8 +229,8 @@ export default function LetterDrop({ onComplete, onFlipComplete }) {
     setCardFlipped(true);
     const tl = gsap.timeline();
     tl.to(pageTurnRef.current, {
-      rotateX: -180,
-      duration: 1.2,
+      rotateY: 180,
+      duration: 1.4,
       ease: 'power2.inOut'
     });
     tl.to(coverContainerRef.current, {
@@ -504,7 +504,7 @@ export default function LetterDrop({ onComplete, onFlipComplete }) {
         {!letterLanded && (
           <div ref={scrollIndicatorRef}
             className="absolute bottom-4 left-0 right-0 flex flex-col items-center z-30 pointer-events-none">
-            <span style={{ fontSize: '11px', color: '#999', fontFamily: "'Montserrat', sans-serif", letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '4px' }}>Scroll Down</span>
+            <span style={{ fontSize: '11px', color: '#999', fontFamily: "'Montserrat', sans-serif", letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '4px' }}>Swipe Down</span>
             <svg width="20" height="20" viewBox="0 0 24 24" style={{ animation: 'scroll-bounce 1.5s ease-in-out infinite' }}>
               <path d="M7 10l5 5 5-5" fill="none" stroke="#999" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
@@ -517,28 +517,23 @@ export default function LetterDrop({ onComplete, onFlipComplete }) {
     {/* ══ FULLSCREEN COVER — triangular flaps turning like pages ══ */}
     {showCover && (
       <div ref={coverContainerRef} className="fixed inset-0 z-50"
-        style={{ overflow: 'hidden', perspective: '1200px', background: '#800000' }}>
+        style={{ overflow: 'hidden', perspective: '1200px', background: '#FFF8E7' }}>
 
         {/* Back page — sits behind the front page */}
         <div className="absolute inset-0 flex items-center justify-center" style={{
-          background: `
-            radial-gradient(ellipse at 20% 80%, rgba(255,255,255,0.03) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.04) 0%, transparent 50%),
-            radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.02) 0%, transparent 60%),
-            linear-gradient(165deg, #060d1f 0%, #0b1630 20%, #081022 40%, #0d1a35 60%, #091328 80%, #060d1f 100%)
-          `,
+          background: 'linear-gradient(145deg, #FFF8E7 0%, #FDEBD0 30%, #FAD7A0 60%, #FDEBD0 100%)',
           zIndex: 1
         }}>
-          {/* Silver border */}
-          <div className="absolute inset-0" style={{ border: '2px solid rgba(192,192,192,0.4)', margin: '16px', borderRadius: '8px' }}>
-            <div className="absolute inset-0" style={{ border: '1px solid rgba(192,192,192,0.2)', margin: '6px', borderRadius: '5px' }} />
+          {/* Gold border */}
+          <div className="absolute inset-0" style={{ border: '2px solid rgba(212,175,55,0.4)', margin: '16px', borderRadius: '8px' }}>
+            <div className="absolute inset-0" style={{ border: '1px solid rgba(212,175,55,0.2)', margin: '6px', borderRadius: '5px' }} />
           </div>
-          {/* Subtle star sparkles */}
+          {/* Subtle gold sparkles */}
           {Array.from({ length: 30 }).map((_, i) => (
             <div key={`star-${i}`} className="absolute rounded-full" style={{
               width: `${1 + Math.random() * 2}px`,
               height: `${1 + Math.random() * 2}px`,
-              background: 'rgba(220,220,255,0.6)',
+              background: 'rgba(212,175,55,0.4)',
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
               animation: `star-twinkle ${2 + Math.random() * 3}s ease-in-out ${Math.random() * 2}s infinite`
@@ -550,10 +545,13 @@ export default function LetterDrop({ onComplete, onFlipComplete }) {
 
         {/* Front page — turns like a book page */}
         <div ref={invitationCardRef} className="absolute inset-0" style={{ opacity: 0, zIndex: 2 }}>
-        <div ref={pageTurnRef} className="absolute inset-0 flex items-center justify-center" style={{
-          background: 'linear-gradient(145deg, #FFF8E7 0%, #FDEBD0 30%, #FAD7A0 60%, #FDEBD0 100%)',
-          transformOrigin: 'center top',
+        <div ref={pageTurnRef} className="absolute inset-0" style={{
+          transformOrigin: 'center center',
           transformStyle: 'preserve-3d',
+        }}>
+        {/* Front face — beige invitation */}
+        <div className="absolute inset-0 flex items-center justify-center" style={{
+          background: 'linear-gradient(145deg, #FFF8E7 0%, #FDEBD0 30%, #FAD7A0 60%, #FDEBD0 100%)',
           backfaceVisibility: 'hidden'
         }}>
           {/* Decorative gold border frame */}
@@ -601,6 +599,16 @@ export default function LetterDrop({ onComplete, onFlipComplete }) {
               Click Here
             </div>
           </div>
+        </div>
+        {/* Back face — blue/dark, visible when flipped */}
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(165deg, #060d1f 0%, #0b1630 25%, #0d1a35 50%, #091328 75%, #060d1f 100%)',
+          backfaceVisibility: 'hidden',
+          transform: 'rotateY(180deg)'
+        }}>
+          {/* Silver border on back */}
+          <div className="absolute inset-0" style={{ border: '2px solid rgba(192,192,192,0.3)', margin: '16px', borderRadius: '8px' }} />
+        </div>
         </div>
         </div>
 
@@ -723,14 +731,10 @@ export default function LetterDrop({ onComplete, onFlipComplete }) {
               }}>
                 <div style={{ position: 'absolute', inset: '4px', borderRadius: '50%', border: '0.8px solid #D4AF37', opacity: 0.5 }} />
                 <div style={{
-                  fontSize: '18px', fontFamily: "'Montserrat', sans-serif",
-                  fontWeight: '700', color: '#D4AF37', lineHeight: 1
-                }}>V & M</div>
-                <div style={{
-                  fontSize: '6px', fontFamily: "'Montserrat', sans-serif",
-                  fontWeight: '700', color: '#D4AF37', letterSpacing: '2px',
-                  marginTop: '4px', textTransform: 'uppercase', opacity: 0.8
-                }}>TAP TO OPEN</div>
+                  fontSize: '14px', fontFamily: "'Montserrat', sans-serif",
+                  fontWeight: '700', color: '#D4AF37', lineHeight: 1,
+                  letterSpacing: '2px', textTransform: 'uppercase'
+                }}>OPEN</div>
               </div>
             </div>
           </div>

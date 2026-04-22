@@ -39,8 +39,12 @@ export default function Reception() {
         50% { opacity: 0.8; transform: scale(1.4); }
       }
       @keyframes palace-float {
-        0%, 100% { transform: translateX(-50%) translateY(0px); }
-        50% { transform: translateX(-50%) translateY(-8px); }
+        0%, 100% { transform: translate(-50%, -70%) translateY(0px); }
+        50% { transform: translate(-50%, -70%) translateY(-6px); }
+      }
+      @keyframes scroll-bounce {
+        0%, 100% { transform: translateY(0); opacity: 1; }
+        50% { transform: translateY(8px); opacity: 0.4; }
       }
     `;
     document.head.appendChild(style);
@@ -167,34 +171,108 @@ export default function Reception() {
         }} />
       ))}
 
-      {/* ═══ SECTION 1: Canvas sequence ═══ */}
+      {/* ═══ SECTION 1: Canvas sequence — Hologram from orb ═══ */}
       <div ref={canvasSectionRef} style={{
         height: '100vh', position: 'relative',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         flexDirection: 'column'
       }}>
-        {/* Decorative frame */}
+        {/* Hologram container — orb at bottom, projection upward */}
         <div style={{
-          position: 'relative', padding: '10px',
-          border: '2px solid rgba(192,192,192,0.35)',
-          borderRadius: '6px',
-          boxShadow: '0 0 30px rgba(192,192,192,0.08), inset 0 0 20px rgba(192,192,192,0.04)',
-          background: 'rgba(0,0,0,0.2)'
+          position: 'relative',
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          width: '100%', maxWidth: '500px'
         }}>
+
+          {/* Trapezium projection area — clips everything inside */}
           <div style={{
-            position: 'absolute', inset: '4px',
-            border: '1px solid rgba(192,192,192,0.15)',
-            borderRadius: '4px', pointerEvents: 'none'
+            position: 'relative',
+            width: '100%',
+            clipPath: 'polygon(30% 0%, 70% 0%, 95% 100%, 5% 100%)',
+            display: 'flex', justifyContent: 'center', alignItems: 'center',
+            paddingBottom: '10px'
+          }}>
+            {/* Projection beam glow (behind the canvas) */}
+            <div style={{
+              position: 'absolute', inset: 0,
+              background: 'linear-gradient(to top, rgba(0, 255, 255, 0.08) 0%, rgba(0, 255, 255, 0.03) 40%, rgba(0, 255, 255, 0.01) 70%, transparent 100%)',
+              pointerEvents: 'none', zIndex: 0
+            }} />
+
+            {/* Canvas — transparent bg, images only */}
+            <div style={{
+              position: 'relative', zIndex: 1,
+              overflow: 'hidden'
+            }}>
+              {/* Holographic scanline overlay */}
+              <div style={{
+                position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
+                background: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0, 255, 255, 0.04) 3px, rgba(0, 255, 255, 0.04) 4px)',
+                mixBlendMode: 'screen'
+              }} />
+              {/* Holographic edge glow */}
+              <div style={{
+                position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none',
+                boxShadow: 'inset 0 0 40px rgba(0, 255, 255, 0.06), inset 0 0 80px rgba(0, 255, 255, 0.03)',
+              }} />
+              <canvas ref={canvasRef} style={{
+                display: 'block',
+                maxWidth: '65vw', maxHeight: '50vh',
+                width: '100%', height: 'auto',
+                filter: 'brightness(1.1) contrast(1.05) saturate(0.9)',
+                opacity: 0.88,
+                mixBlendMode: 'screen'
+              }} />
+            </div>
+          </div>
+
+          {/* Convergence point glow — where trapezium meets the orb */}
+          <div style={{
+            width: '80px', height: '6px',
+            background: 'radial-gradient(ellipse, rgba(0, 255, 255, 0.5) 0%, transparent 70%)',
+            filter: 'blur(3px)',
+            marginTop: '-4px', zIndex: 3, pointerEvents: 'none'
           }} />
-          <canvas ref={canvasRef} style={{
-            display: 'block',
-            maxWidth: '75vw', maxHeight: '55vh',
-            width: '100%', height: 'auto',
-            borderRadius: '2px'
-          }} />
+
+          {/* Orb / Sphere base — the hologram projector */}
+          <div style={{
+            marginTop: '4px',
+            width: '54px', height: '54px',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle at 35% 35%, #2a4a6b 0%, #0a1628 50%, #050d1a 100%)',
+            boxShadow: '0 0 25px rgba(0, 255, 255, 0.35), 0 0 50px rgba(0, 255, 255, 0.15), 0 4px 12px rgba(0,0,0,0.5), inset 0 -4px 8px rgba(0, 255, 255, 0.1)',
+            position: 'relative',
+            zIndex: 4
+          }}>
+            {/* Inner glow ring */}
+            <div style={{
+              position: 'absolute', inset: '7px',
+              borderRadius: '50%',
+              border: '1px solid rgba(0, 255, 255, 0.35)',
+              boxShadow: 'inset 0 0 10px rgba(0, 255, 255, 0.2)'
+            }} />
+            {/* Core light */}
+            <div style={{
+              position: 'absolute', top: '50%', left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '12px', height: '12px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(0,255,255,0.9) 0%, rgba(0,255,255,0.3) 60%, transparent 100%)',
+              animation: 'reception-star-twinkle 2s ease-in-out infinite'
+            }} />
+            {/* Upward beam from orb top */}
+            <div style={{
+              position: 'absolute', top: '-8px', left: '50%',
+              transform: 'translateX(-50%)',
+              width: '4px', height: '10px',
+              background: 'linear-gradient(to top, rgba(0,255,255,0.6), transparent)',
+              borderRadius: '2px', filter: 'blur(1px)',
+              pointerEvents: 'none'
+            }} />
+          </div>
         </div>
 
-        {/* Text overlay below frame */}
+        {/* Text overlay below hologram */}
         <div ref={textOverlayRef} style={{
           marginTop: '28px', textAlign: 'center',
           fontFamily: "'Great Vibes', cursive", fontSize: '30px',
@@ -205,6 +283,22 @@ export default function Reception() {
           minHeight: '44px'
         }}>
           {textOverlay}
+        </div>
+
+        {/* Keep Swiping prompt */}
+        <div style={{
+          marginTop: '20px', textAlign: 'center',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px'
+        }}>
+          <span style={{
+            fontSize: '11px', color: 'rgba(0, 255, 255, 0.6)',
+            fontFamily: "'Montserrat', sans-serif", letterSpacing: '3px',
+            textTransform: 'uppercase',
+            textShadow: '0 0 8px rgba(0, 255, 255, 0.3)'
+          }}>Keep Swiping</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" style={{ animation: 'scroll-bounce 1.5s ease-in-out infinite' }}>
+            <path d="M7 10l5 5 5-5" fill="none" stroke="rgba(0, 255, 255, 0.5)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </div>
       </div>
 
@@ -261,111 +355,154 @@ export default function Reception() {
         <div style={{
           position: 'relative', width: '90%', maxWidth: '700px'
         }}>
-          {/* 3D Palace structure hovering above map */}
-          <a
-            ref={palaceRef}
-            href={`https://www.google.com/maps/search/${GOOGLE_MAPS_QUERY}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              position: 'absolute', top: '-90px', left: '50%',
-              transform: 'translateX(-50%)',
-              zIndex: 2, cursor: 'pointer', textDecoration: 'none',
-              animation: 'palace-float 4s ease-in-out infinite',
-              opacity: 0
-            }}
-          >
-            <svg width="180" height="140" viewBox="0 0 180 140" style={{
-              filter: 'drop-shadow(0 12px 24px rgba(0,0,0,0.6))'
-            }}>
-              {/* Palace base platform */}
-              <rect x="15" y="115" width="150" height="10" rx="2"
-                fill="#1a237e" stroke="rgba(192,192,192,0.4)" strokeWidth="0.8" />
+          {/* Google Maps embed — no default pin visible, palace replaces it */}
+          <div style={{ position: 'relative', borderRadius: '8px', overflow: 'hidden' }}>
+            <iframe
+              title="Kiran Palace Location"
+              src={`https://maps.google.com/maps?q=${GOOGLE_MAPS_QUERY}&output=embed`}
+              style={{
+                width: '100%', height: '380px',
+                border: '2px solid rgba(192,192,192,0.25)',
+                borderRadius: '8px',
+                filter: 'brightness(0.85) contrast(1.1)'
+              }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
 
-              {/* Main building body */}
-              <rect x="35" y="55" width="110" height="60" rx="2"
-                fill="url(#palaceWall)" stroke="rgba(192,192,192,0.35)" strokeWidth="0.8" />
+            {/* 3D Palace icon — replaces the red pin, positioned at map center */}
+            <a
+              ref={palaceRef}
+              href={`https://www.google.com/maps/search/${GOOGLE_MAPS_QUERY}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                position: 'absolute', top: '50%', left: '50%',
+                transform: 'translate(-50%, -70%)',
+                zIndex: 2, cursor: 'pointer', textDecoration: 'none',
+                pointerEvents: 'auto',
+                opacity: 0
+              }}
+            >
+              <svg width="100" height="90" viewBox="0 0 180 150" style={{
+                filter: 'drop-shadow(0 6px 16px rgba(0,0,0,0.5))'
+              }}>
+                {/* Palace base platform */}
+                <rect x="15" y="115" width="150" height="10" rx="2"
+                  fill="#e8c4a0" stroke="rgba(212,175,55,0.5)" strokeWidth="0.8" />
 
-              {/* Central dome */}
-              <ellipse cx="90" cy="48" rx="35" ry="22"
-                fill="url(#palaceDome)" stroke="rgba(192,192,192,0.4)" strokeWidth="0.8" />
-              {/* Dome pinnacle */}
-              <line x1="90" y1="26" x2="90" y2="16" stroke="#D4AF37" strokeWidth="1.5" />
-              <circle cx="90" cy="14" r="3" fill="#D4AF37" />
+                {/* Main building body — peach */}
+                <rect x="35" y="55" width="110" height="60" rx="2"
+                  fill="url(#palaceWallPeach)" stroke="rgba(212,175,55,0.4)" strokeWidth="0.8" />
 
-              {/* Left tower */}
-              <rect x="18" y="45" width="22" height="70" rx="1"
-                fill="url(#palaceWall)" stroke="rgba(192,192,192,0.35)" strokeWidth="0.8" />
-              <polygon points="18,45 29,22 40,45"
-                fill="url(#palaceDome)" stroke="rgba(192,192,192,0.4)" strokeWidth="0.8" />
-              <circle cx="29" cy="20" r="2" fill="#D4AF37" />
+                {/* Central dome — peach */}
+                <ellipse cx="90" cy="48" rx="35" ry="22"
+                  fill="url(#palaceDomePeach)" stroke="rgba(212,175,55,0.5)" strokeWidth="0.8" />
+                {/* Dome pinnacle */}
+                <line x1="90" y1="26" x2="90" y2="16" stroke="#D4AF37" strokeWidth="1.5" />
+                <circle cx="90" cy="14" r="3" fill="#D4AF37" />
 
-              {/* Right tower */}
-              <rect x="140" y="45" width="22" height="70" rx="1"
-                fill="url(#palaceWall)" stroke="rgba(192,192,192,0.35)" strokeWidth="0.8" />
-              <polygon points="140,45 151,22 162,45"
-                fill="url(#palaceDome)" stroke="rgba(192,192,192,0.4)" strokeWidth="0.8" />
-              <circle cx="151" cy="20" r="2" fill="#D4AF37" />
+                {/* Left tower */}
+                <rect x="18" y="45" width="22" height="70" rx="1"
+                  fill="url(#palaceWallPeach)" stroke="rgba(212,175,55,0.4)" strokeWidth="0.8" />
+                <polygon points="18,45 29,22 40,45"
+                  fill="url(#palaceDomePeach)" stroke="rgba(212,175,55,0.5)" strokeWidth="0.8" />
+                <circle cx="29" cy="20" r="2" fill="#D4AF37" />
 
-              {/* Central door arch */}
-              <rect x="78" y="85" width="24" height="30" rx="12"
-                fill="#0d1a35" stroke="rgba(192,192,192,0.25)" strokeWidth="0.5" />
+                {/* Right tower */}
+                <rect x="140" y="45" width="22" height="70" rx="1"
+                  fill="url(#palaceWallPeach)" stroke="rgba(212,175,55,0.4)" strokeWidth="0.8" />
+                <polygon points="140,45 151,22 162,45"
+                  fill="url(#palaceDomePeach)" stroke="rgba(212,175,55,0.5)" strokeWidth="0.8" />
+                <circle cx="151" cy="20" r="2" fill="#D4AF37" />
 
-              {/* Windows row */}
-              <rect x="48" y="68" width="12" height="14" rx="6"
-                fill="#0d47a1" stroke="rgba(192,192,192,0.25)" strokeWidth="0.5" />
-              <rect x="66" y="68" width="12" height="14" rx="6"
-                fill="#0d47a1" stroke="rgba(192,192,192,0.25)" strokeWidth="0.5" />
-              <rect x="102" y="68" width="12" height="14" rx="6"
-                fill="#0d47a1" stroke="rgba(192,192,192,0.25)" strokeWidth="0.5" />
-              <rect x="120" y="68" width="12" height="14" rx="6"
-                fill="#0d47a1" stroke="rgba(192,192,192,0.25)" strokeWidth="0.5" />
+                {/* Central door arch */}
+                <rect x="78" y="85" width="24" height="30" rx="12"
+                  fill="#8B6B4A" stroke="rgba(212,175,55,0.3)" strokeWidth="0.5" />
 
-              {/* Tower windows */}
-              <rect x="24" y="60" width="10" height="12" rx="5"
-                fill="#0d47a1" stroke="rgba(192,192,192,0.2)" strokeWidth="0.4" />
-              <rect x="146" y="60" width="10" height="12" rx="5"
-                fill="#0d47a1" stroke="rgba(192,192,192,0.2)" strokeWidth="0.4" />
+                {/* Windows row */}
+                <rect x="48" y="68" width="12" height="14" rx="6"
+                  fill="#c99b6d" stroke="rgba(212,175,55,0.3)" strokeWidth="0.5" />
+                <rect x="66" y="68" width="12" height="14" rx="6"
+                  fill="#c99b6d" stroke="rgba(212,175,55,0.3)" strokeWidth="0.5" />
+                <rect x="102" y="68" width="12" height="14" rx="6"
+                  fill="#c99b6d" stroke="rgba(212,175,55,0.3)" strokeWidth="0.5" />
+                <rect x="120" y="68" width="12" height="14" rx="6"
+                  fill="#c99b6d" stroke="rgba(212,175,55,0.3)" strokeWidth="0.5" />
 
-              {/* Gradients */}
-              <defs>
-                <linearGradient id="palaceWall" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#1a237e" />
-                  <stop offset="100%" stopColor="#0d1452" />
-                </linearGradient>
-                <linearGradient id="palaceDome" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#283593" />
-                  <stop offset="100%" stopColor="#1a237e" />
-                </linearGradient>
-              </defs>
-            </svg>
+                {/* Tower windows */}
+                <rect x="24" y="60" width="10" height="12" rx="5"
+                  fill="#c99b6d" stroke="rgba(212,175,55,0.3)" strokeWidth="0.4" />
+                <rect x="146" y="60" width="10" height="12" rx="5"
+                  fill="#c99b6d" stroke="rgba(212,175,55,0.3)" strokeWidth="0.4" />
 
-            {/* Label below palace */}
-            <div style={{
-              textAlign: 'center', marginTop: '4px',
-              fontFamily: "'Playfair Display', serif", fontSize: '13px',
-              letterSpacing: '2px',
-              background: 'linear-gradient(180deg, #e0e0e0, #a8a8a8)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
-            }}>
-              Kiran Palace, Korattur
-            </div>
-          </a>
+                {/* Serial set lights on roofline — golden yellow dots */}
+                {[40, 52, 64, 76, 88, 100, 112, 124, 136].map((lx, li) => (
+                  <circle key={`light-roof-${li}`} cx={lx} cy="55" r="1.8"
+                    fill="#FFD700" opacity={li % 2 === 0 ? "1" : "0.6"}
+                    style={{ animation: `reception-star-twinkle ${1 + (li % 3) * 0.4}s ease-in-out ${li * 0.15}s infinite` }}
+                  />
+                ))}
+                {/* Serial lights on dome */}
+                {[60, 70, 80, 90, 100, 110, 120].map((lx, li) => (
+                  <circle key={`light-dome-${li}`} cx={lx} cy={48 - 18 + Math.abs(lx - 90) * 0.12} r="1.5"
+                    fill="#FFD700" opacity={li % 2 === 0 ? "0.7" : "1"}
+                    style={{ animation: `reception-star-twinkle ${0.8 + (li % 4) * 0.3}s ease-in-out ${li * 0.2}s infinite` }}
+                  />
+                ))}
+                {/* Serial lights on base platform */}
+                {[20, 35, 50, 65, 80, 95, 110, 125, 140, 155].map((lx, li) => (
+                  <circle key={`light-base-${li}`} cx={lx} cy="114" r="1.5"
+                    fill="#FFD700" opacity={li % 2 === 0 ? "1" : "0.5"}
+                    style={{ animation: `reception-star-twinkle ${1.2 + (li % 3) * 0.3}s ease-in-out ${li * 0.12}s infinite` }}
+                  />
+                ))}
+                {/* Serial lights on left tower */}
+                {[23, 29, 35].map((lx, li) => (
+                  <circle key={`light-lt-${li}`} cx={lx} cy="45" r="1.3"
+                    fill="#FFD700" opacity="0.8"
+                    style={{ animation: `reception-star-twinkle ${1 + li * 0.3}s ease-in-out ${li * 0.25}s infinite` }}
+                  />
+                ))}
+                {/* Serial lights on right tower */}
+                {[145, 151, 157].map((lx, li) => (
+                  <circle key={`light-rt-${li}`} cx={lx} cy="45" r="1.3"
+                    fill="#FFD700" opacity="0.8"
+                    style={{ animation: `reception-star-twinkle ${1 + li * 0.3}s ease-in-out ${li * 0.25}s infinite` }}
+                  />
+                ))}
 
-          {/* Google Maps embed */}
-          <iframe
-            title="Kiran Palace Location"
-            src={`https://maps.google.com/maps?q=${GOOGLE_MAPS_QUERY}&output=embed`}
-            style={{
-              width: '100%', height: '380px',
-              border: '2px solid rgba(192,192,192,0.25)',
-              borderRadius: '8px',
-              filter: 'brightness(0.85) contrast(1.1)'
-            }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
+                {/* Pin pointer triangle below palace */}
+                <polygon points="80,125 90,145 100,125" fill="#e8c4a0" stroke="rgba(212,175,55,0.4)" strokeWidth="0.5" />
+                <circle cx="90" cy="145" r="3" fill="#D4AF37" opacity="0.6" />
+
+                {/* Gradients — peach palette */}
+                <defs>
+                  <linearGradient id="palaceWallPeach" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#f5d5b8" />
+                    <stop offset="100%" stopColor="#e8c4a0" />
+                  </linearGradient>
+                  <linearGradient id="palaceDomePeach" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#f8dcc4" />
+                    <stop offset="100%" stopColor="#f0cca8" />
+                  </linearGradient>
+                </defs>
+              </svg>
+
+              {/* Label below palace pin */}
+              <div style={{
+                textAlign: 'center', marginTop: '2px',
+                fontFamily: "'Playfair Display', serif", fontSize: '11px',
+                letterSpacing: '1px',
+                color: '#fff',
+                textShadow: '0 1px 4px rgba(0,0,0,0.8)',
+                fontWeight: '600'
+              }}>
+                Kiran Palace
+              </div>
+            </a>
+          </div>
         </div>
 
         {/* Bottom spacer */}

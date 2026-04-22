@@ -61,11 +61,11 @@ export default function HeroSky() {
   const [showScroll, setShowScroll] = useState(false);
 
   useEffect(() => {
-    // 1. Slower right-to-left airplane motion
+    // 1. Fast right-to-left airplane motion
     const tl = gsap.timeline({ repeat: -1 });
     tl.fromTo(containerRef.current,
       { x: '110vw', y: '25dvh' },
-      { x: '-350vw', y: '35dvh', duration: 45, ease: 'none' }
+      { x: '-120vw', y: '35dvh', duration: 12, ease: 'none' }
     );
 
     // 2. Rope wave animation
@@ -77,32 +77,32 @@ export default function HeroSky() {
       ease: "sine.inOut"
     });
 
-    // 3. Hyper-realistic cloth wind animation — multi-phase timeline
+    // 3. Cloth wind animation — scaled to compact banner
     const clothTl = gsap.timeline({ repeat: -1 });
     clothTl
       .to(bannerPathRef.current, {
         duration: 0.7,
-        attr: { d: "M0 12 C 112 -8, 225 32, 337 5 C 450 -12, 562 35, 675 8 C 787 -8, 850 30, 900 12 L 900 108 C 850 120, 787 88, 675 112 C 562 125, 450 85, 337 108 C 225 122, 112 88, 0 108 Z" },
+        attr: { d: "M0 12 C 47 -8, 95 32, 142 5 C 190 -12, 237 35, 285 8 C 332 -8, 360 30, 380 12 L 380 108 C 360 120, 332 88, 285 112 C 237 125, 190 85, 142 108 C 95 122, 47 88, 0 108 Z" },
         ease: "sine.inOut"
       })
       .to(bannerPathRef.current, {
         duration: 0.6,
-        attr: { d: "M0 22 C 112 30, 225 -5, 337 18 C 450 30, 562 -8, 675 22 C 787 32, 850 0, 900 22 L 900 98 C 850 85, 787 115, 675 95 C 562 82, 450 118, 337 98 C 225 85, 112 115, 0 98 Z" },
+        attr: { d: "M0 22 C 47 30, 95 -5, 142 18 C 190 30, 237 -8, 285 22 C 332 32, 360 0, 380 22 L 380 98 C 360 85, 332 115, 285 95 C 237 82, 190 118, 142 98 C 95 85, 47 115, 0 98 Z" },
         ease: "sine.inOut"
       })
       .to(bannerPathRef.current, {
         duration: 0.8,
-        attr: { d: "M0 8 C 112 -12, 225 28, 337 2 C 450 -15, 562 32, 675 5 C 787 -12, 850 25, 900 8 L 900 112 C 850 125, 787 85, 675 115 C 562 128, 450 82, 337 112 C 225 125, 112 85, 0 112 Z" },
+        attr: { d: "M0 8 C 47 -12, 95 28, 142 2 C 190 -15, 237 32, 285 5 C 332 -12, 360 25, 380 8 L 380 112 C 360 125, 332 85, 285 115 C 237 128, 190 82, 142 112 C 95 125, 47 85, 0 112 Z" },
         ease: "sine.inOut"
       })
       .to(bannerPathRef.current, {
         duration: 0.7,
-        attr: { d: "M0 18 C 112 28, 225 0, 337 22 C 450 35, 562 -5, 675 18 C 787 28, 850 -2, 900 18 L 900 102 C 850 88, 787 118, 675 98 C 562 85, 450 120, 337 102 C 225 88, 112 118, 0 102 Z" },
+        attr: { d: "M0 18 C 47 28, 95 0, 142 22 C 190 35, 237 -5, 285 18 C 332 28, 360 -2, 380 18 L 380 102 C 360 88, 332 118, 285 98 C 237 85, 190 120, 142 102 C 95 88, 47 118, 0 102 Z" },
         ease: "sine.inOut"
       })
       .to(bannerPathRef.current, {
         duration: 0.6,
-        attr: { d: "M0 15 C 112 0, 225 25, 337 12 C 450 -2, 562 28, 675 15 C 787 2, 850 22, 900 15 L 900 105 C 850 118, 787 92, 675 108 C 562 120, 450 90, 337 105 C 225 118, 112 92, 0 105 Z" },
+        attr: { d: "M0 15 C 47 0, 95 25, 142 12 C 190 -2, 237 28, 285 15 C 332 2, 360 22, 380 15 L 380 105 C 360 118, 332 92, 285 108 C 237 120, 190 90, 142 105 C 95 118, 47 92, 0 105 Z" },
         ease: "sine.inOut"
       });
 
@@ -362,29 +362,29 @@ export default function HeroSky() {
            </svg>
         </div>
 
-        {/* 3. Extended silk banner — text fits inside via viewBox scaling */}
+        {/* 3. Compact silk banner — snug fit around text */}
         <div className="relative" style={{ marginLeft: '-5px' }}>
-           <svg width="900" height="120" viewBox="0 0 900 120" preserveAspectRatio="xMidYMid meet">
+           <svg width="380" height="120" viewBox="0 0 380 120" preserveAspectRatio="xMidYMid meet">
               <path 
                 ref={bannerPathRef}
-                d="M0 15 C 112 0, 225 25, 337 12 C 450 -2, 562 28, 675 15 C 787 2, 850 22, 900 15 L 900 105 C 850 118, 787 92, 675 108 C 562 120, 450 90, 337 105 C 225 118, 112 92, 0 105 Z" 
+                d="M0 15 C 47 0, 95 25, 142 12 C 190 -2, 237 28, 285 15 C 332 2, 360 22, 380 15 L 380 105 C 360 118, 332 92, 285 108 C 237 120, 190 90, 142 105 C 95 118, 47 92, 0 105 Z" 
                 fill="var(--maroon)" 
                 stroke="var(--gold)"
                 strokeWidth="1.5"
               />
               {/* Text safely inset inside cloth — clipped to banner path */}
               <clipPath id="bannerClip">
-                <rect x="60" y="25" width="780" height="70" />
+                <rect x="20" y="25" width="340" height="70" />
               </clipPath>
-              <text x="450" y="62" textAnchor="middle" fill="var(--gold)" clipPath="url(#bannerClip)" style={{ 
-                fontSize: '26px', 
+              <text x="190" y="62" textAnchor="middle" fill="var(--gold)" clipPath="url(#bannerClip)" style={{ 
+                fontSize: '22px', 
                 fontFamily: "'Montserrat', sans-serif", 
                 fontWeight: '900',
                 textTransform: 'uppercase',
-                letterSpacing: '2px',
+                letterSpacing: '1px',
                 dominantBaseline: 'middle'
               }}>
-                28th and 29th May 2026
+                28th & 29th May 2026
               </text>
            </svg>
         </div>
@@ -394,7 +394,7 @@ export default function HeroSky() {
       <div ref={scrollIndicatorRef}
         className="absolute bottom-6 left-1/2 flex flex-col items-center z-30 pointer-events-none"
         style={{ transform: 'translateX(-50%)', opacity: 0, transition: 'opacity 0.6s ease' }}>
-        <span style={{ fontSize: '12px', color: '#fff', fontFamily: "'Montserrat', sans-serif", letterSpacing: '2px', textTransform: 'uppercase', textShadow: '0 1px 4px rgba(0,0,0,0.4)', marginBottom: '6px' }}>Scroll Down</span>
+        <span style={{ fontSize: '12px', color: '#fff', fontFamily: "'Montserrat', sans-serif", letterSpacing: '2px', textTransform: 'uppercase', textShadow: '0 1px 4px rgba(0,0,0,0.4)', marginBottom: '6px' }}>Swipe Down</span>
         <svg width="24" height="24" viewBox="0 0 24 24" style={{ animation: 'scroll-bounce 1.5s ease-in-out infinite' }}>
           <path d="M7 10l5 5 5-5" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.4))' }} />
         </svg>
