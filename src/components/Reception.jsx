@@ -148,7 +148,7 @@ export default function Reception() {
 
   const textOverlay = currentFrame <= 10
     ? 'From college corridors'
-    : "To marriage vows, We've grown together";
+    : "To wedding vows, We've grown together";
 
   return (
     <div style={{
@@ -177,104 +177,10 @@ export default function Reception() {
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         flexDirection: 'column'
       }}>
-        {/* Hologram container — orb at bottom, projection upward */}
-        <div style={{
-          position: 'relative',
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          width: '100%', maxWidth: '500px'
-        }}>
 
-          {/* Trapezium projection area — clips everything inside */}
-          <div style={{
-            position: 'relative',
-            width: '100%',
-            clipPath: 'polygon(30% 0%, 70% 0%, 95% 100%, 5% 100%)',
-            display: 'flex', justifyContent: 'center', alignItems: 'center',
-            paddingBottom: '10px'
-          }}>
-            {/* Projection beam glow (behind the canvas) */}
-            <div style={{
-              position: 'absolute', inset: 0,
-              background: 'linear-gradient(to top, rgba(0, 255, 255, 0.08) 0%, rgba(0, 255, 255, 0.03) 40%, rgba(0, 255, 255, 0.01) 70%, transparent 100%)',
-              pointerEvents: 'none', zIndex: 0
-            }} />
-
-            {/* Canvas — transparent bg, images only */}
-            <div style={{
-              position: 'relative', zIndex: 1,
-              overflow: 'hidden'
-            }}>
-              {/* Holographic scanline overlay */}
-              <div style={{
-                position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
-                background: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0, 255, 255, 0.04) 3px, rgba(0, 255, 255, 0.04) 4px)',
-                mixBlendMode: 'screen'
-              }} />
-              {/* Holographic edge glow */}
-              <div style={{
-                position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none',
-                boxShadow: 'inset 0 0 40px rgba(0, 255, 255, 0.06), inset 0 0 80px rgba(0, 255, 255, 0.03)',
-              }} />
-              <canvas ref={canvasRef} style={{
-                display: 'block',
-                maxWidth: '65vw', maxHeight: '50vh',
-                width: '100%', height: 'auto',
-                filter: 'brightness(1.1) contrast(1.05) saturate(0.9)',
-                opacity: 0.88,
-                mixBlendMode: 'screen'
-              }} />
-            </div>
-          </div>
-
-          {/* Convergence point glow — where trapezium meets the orb */}
-          <div style={{
-            width: '80px', height: '6px',
-            background: 'radial-gradient(ellipse, rgba(0, 255, 255, 0.5) 0%, transparent 70%)',
-            filter: 'blur(3px)',
-            marginTop: '-4px', zIndex: 3, pointerEvents: 'none'
-          }} />
-
-          {/* Orb / Sphere base — the hologram projector */}
-          <div style={{
-            marginTop: '4px',
-            width: '54px', height: '54px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle at 35% 35%, #2a4a6b 0%, #0a1628 50%, #050d1a 100%)',
-            boxShadow: '0 0 25px rgba(0, 255, 255, 0.35), 0 0 50px rgba(0, 255, 255, 0.15), 0 4px 12px rgba(0,0,0,0.5), inset 0 -4px 8px rgba(0, 255, 255, 0.1)',
-            position: 'relative',
-            zIndex: 4
-          }}>
-            {/* Inner glow ring */}
-            <div style={{
-              position: 'absolute', inset: '7px',
-              borderRadius: '50%',
-              border: '1px solid rgba(0, 255, 255, 0.35)',
-              boxShadow: 'inset 0 0 10px rgba(0, 255, 255, 0.2)'
-            }} />
-            {/* Core light */}
-            <div style={{
-              position: 'absolute', top: '50%', left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '12px', height: '12px',
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(0,255,255,0.9) 0%, rgba(0,255,255,0.3) 60%, transparent 100%)',
-              animation: 'reception-star-twinkle 2s ease-in-out infinite'
-            }} />
-            {/* Upward beam from orb top */}
-            <div style={{
-              position: 'absolute', top: '-8px', left: '50%',
-              transform: 'translateX(-50%)',
-              width: '4px', height: '10px',
-              background: 'linear-gradient(to top, rgba(0,255,255,0.6), transparent)',
-              borderRadius: '2px', filter: 'blur(1px)',
-              pointerEvents: 'none'
-            }} />
-          </div>
-        </div>
-
-        {/* Text overlay below hologram */}
+        {/* Text overlay ABOVE hologram */}
         <div ref={textOverlayRef} style={{
-          marginTop: '28px', textAlign: 'center',
+          marginBottom: '24px', textAlign: 'center',
           fontFamily: "'Great Vibes', cursive", fontSize: '30px',
           background: 'linear-gradient(180deg, #ffffff 0%, #c0c0c0 40%, #e8e8e8 70%, #a0a0a0 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
@@ -285,19 +191,121 @@ export default function Reception() {
           {textOverlay}
         </div>
 
+        {/* Two line spacer */}
+        <div style={{ height: '40px' }} />
+
+        {/* Hologram container — sphere at bottom, torch-like projection upward */}
+        <div style={{
+          position: 'relative',
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          width: '100%', maxWidth: '500px'
+        }}>
+
+          {/* Trapezium projection area — narrow at bottom (sphere), expanding to full canvas width at top (torch) */}
+          <div style={{
+            position: 'relative',
+            width: '100%',
+            clipPath: 'polygon(0% 0%, 100% 0%, 65% 100%, 35% 100%)',
+            display: 'flex', justifyContent: 'center', alignItems: 'center',
+            paddingBottom: '10px'
+          }}>
+            {/* Projection beam glow (behind the canvas) */}
+            <div style={{
+              position: 'absolute', inset: 0,
+              background: 'linear-gradient(to bottom, rgba(200, 220, 255, 0.04) 0%, rgba(200, 220, 255, 0.02) 50%, rgba(200, 220, 255, 0.06) 100%)',
+              pointerEvents: 'none', zIndex: 0
+            }} />
+
+            {/* Canvas — holographic look */}
+            <div style={{
+              position: 'relative', zIndex: 1,
+              overflow: 'hidden'
+            }}>
+              {/* Holographic scanline overlay */}
+              <div style={{
+                position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
+                background: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(200, 220, 255, 0.03) 3px, rgba(200, 220, 255, 0.03) 4px)',
+                mixBlendMode: 'screen'
+              }} />
+              <canvas ref={canvasRef} style={{
+                display: 'block',
+                maxWidth: '65vw', maxHeight: '45vh',
+                width: '100%', height: 'auto',
+                filter: 'brightness(1.15) contrast(1.05) saturate(0.85)',
+                opacity: 0.55,
+                mixBlendMode: 'screen'
+              }} />
+            </div>
+          </div>
+
+          {/* Convergence point glow — where trapezium meets the sphere */}
+          <div style={{
+            width: '50px', height: '6px',
+            background: 'radial-gradient(ellipse, rgba(200, 220, 255, 0.6) 0%, transparent 70%)',
+            filter: 'blur(3px)',
+            marginTop: '-4px', zIndex: 3, pointerEvents: 'none'
+          }} />
+
+          {/* Silver titanium sphere — the hologram projector */}
+          <div style={{
+            marginTop: '4px',
+            width: '50px', height: '50px',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle at 30% 30%, #f0f0f0 0%, #c0c0c0 25%, #909090 50%, #606060 75%, #404040 100%)',
+            boxShadow: '0 0 20px rgba(200, 220, 255, 0.35), 0 0 40px rgba(200, 220, 255, 0.15), 0 4px 12px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.4), inset 0 -3px 6px rgba(0,0,0,0.3)',
+            position: 'relative',
+            zIndex: 4
+          }}>
+            {/* Titanium sheen highlight */}
+            <div style={{
+              position: 'absolute', top: '6px', left: '10px',
+              width: '14px', height: '8px',
+              borderRadius: '50%',
+              background: 'rgba(255,255,255,0.5)',
+              filter: 'blur(3px)',
+              pointerEvents: 'none'
+            }} />
+            {/* Inner ring */}
+            <div style={{
+              position: 'absolute', inset: '6px',
+              borderRadius: '50%',
+              border: '1px solid rgba(255,255,255,0.2)',
+              boxShadow: 'inset 0 0 8px rgba(200,220,255,0.15)'
+            }} />
+            {/* Core light emitter */}
+            <div style={{
+              position: 'absolute', top: '50%', left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '10px', height: '10px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(200,220,255,0.8) 0%, rgba(200,220,255,0.2) 60%, transparent 100%)',
+              animation: 'reception-star-twinkle 2s ease-in-out infinite'
+            }} />
+            {/* Upward beam from sphere top */}
+            <div style={{
+              position: 'absolute', top: '-10px', left: '50%',
+              transform: 'translateX(-50%)',
+              width: '6px', height: '12px',
+              background: 'linear-gradient(to top, rgba(200,220,255,0.5), transparent)',
+              borderRadius: '3px', filter: 'blur(2px)',
+              pointerEvents: 'none'
+            }} />
+          </div>
+        </div>
+
         {/* Keep Swiping prompt */}
         <div style={{
-          marginTop: '20px', textAlign: 'center',
+          marginTop: '24px', textAlign: 'center',
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px'
         }}>
           <span style={{
-            fontSize: '11px', color: 'rgba(0, 255, 255, 0.6)',
+            fontSize: '11px', color: 'rgba(200, 220, 255, 0.5)',
             fontFamily: "'Montserrat', sans-serif", letterSpacing: '3px',
             textTransform: 'uppercase',
-            textShadow: '0 0 8px rgba(0, 255, 255, 0.3)'
+            textShadow: '0 0 8px rgba(200, 220, 255, 0.2)'
           }}>Keep Swiping</span>
           <svg width="20" height="20" viewBox="0 0 24 24" style={{ animation: 'scroll-bounce 1.5s ease-in-out infinite' }}>
-            <path d="M7 10l5 5 5-5" fill="none" stroke="rgba(0, 255, 255, 0.5)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M7 10l5 5 5-5" fill="none" stroke="rgba(200, 220, 255, 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
       </div>
@@ -359,7 +367,7 @@ export default function Reception() {
           <div style={{ position: 'relative', borderRadius: '8px', overflow: 'hidden' }}>
             <iframe
               title="Kiran Palace Location"
-              src={`https://maps.google.com/maps?q=${GOOGLE_MAPS_QUERY}&output=embed`}
+              src={`https://maps.google.com/maps?q=${GOOGLE_MAPS_QUERY}&output=embed&z=16`}
               style={{
                 width: '100%', height: '380px',
                 border: '2px solid rgba(192,192,192,0.25)',
@@ -371,22 +379,22 @@ export default function Reception() {
               referrerPolicy="no-referrer-when-downgrade"
             />
 
-            {/* 3D Palace icon — replaces the red pin, positioned at map center */}
+            {/* 3D Palace icon — positioned over the red pin to replace it */}
             <a
               ref={palaceRef}
               href={`https://www.google.com/maps/search/${GOOGLE_MAPS_QUERY}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                position: 'absolute', top: '50%', left: '50%',
-                transform: 'translate(-50%, -70%)',
+                position: 'absolute', top: '42%', left: '50%',
+                transform: 'translate(-50%, -50%)',
                 zIndex: 2, cursor: 'pointer', textDecoration: 'none',
                 pointerEvents: 'auto',
                 opacity: 0
               }}
             >
-              <svg width="100" height="90" viewBox="0 0 180 150" style={{
-                filter: 'drop-shadow(0 6px 16px rgba(0,0,0,0.5))'
+              <svg width="120" height="110" viewBox="0 0 180 160" style={{
+                filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.6))'
               }}>
                 {/* Palace base platform */}
                 <rect x="15" y="115" width="150" height="10" rx="2"

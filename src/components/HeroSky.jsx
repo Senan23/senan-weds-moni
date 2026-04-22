@@ -61,11 +61,11 @@ export default function HeroSky() {
   const [showScroll, setShowScroll] = useState(false);
 
   useEffect(() => {
-    // 1. Fast right-to-left airplane motion
+    // 1. Very fast right-to-left airplane motion
     const tl = gsap.timeline({ repeat: -1 });
     tl.fromTo(containerRef.current,
       { x: '110vw', y: '25dvh' },
-      { x: '-120vw', y: '35dvh', duration: 12, ease: 'none' }
+      { x: '-120vw', y: '35dvh', duration: 6, ease: 'none' }
     );
 
     // 2. Rope wave animation
@@ -233,14 +233,12 @@ export default function HeroSky() {
       });
     });
 
-    // Show scroll indicator after plane reaches ~center (~5s)
-    const scrollTimer = setTimeout(() => {
-      if (scrollIndicatorRef.current) {
-        scrollIndicatorRef.current.style.opacity = '1';
-      }
-    }, 5000);
+    // Show SWIPE DOWN immediately when plane enters
+    if (scrollIndicatorRef.current) {
+      scrollIndicatorRef.current.style.opacity = '1';
+    }
 
-    return () => clearTimeout(scrollTimer);
+    return () => {};
   }, []);
 
   return (
@@ -394,7 +392,7 @@ export default function HeroSky() {
       <div ref={scrollIndicatorRef}
         className="absolute bottom-6 left-1/2 flex flex-col items-center z-30 pointer-events-none"
         style={{ transform: 'translateX(-50%)', opacity: 0, transition: 'opacity 0.6s ease' }}>
-        <span style={{ fontSize: '12px', color: '#fff', fontFamily: "'Montserrat', sans-serif", letterSpacing: '2px', textTransform: 'uppercase', textShadow: '0 1px 4px rgba(0,0,0,0.4)', marginBottom: '6px' }}>Swipe Down</span>
+        <span style={{ fontSize: '13px', color: '#fff', fontFamily: "'Montserrat', sans-serif", letterSpacing: '3px', textTransform: 'uppercase', textShadow: '0 1px 4px rgba(0,0,0,0.4)', marginBottom: '6px', fontWeight: '600' }}>SWIPE DOWN</span>
         <svg width="24" height="24" viewBox="0 0 24 24" style={{ animation: 'scroll-bounce 1.5s ease-in-out infinite' }}>
           <path d="M7 10l5 5 5-5" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.4))' }} />
         </svg>
