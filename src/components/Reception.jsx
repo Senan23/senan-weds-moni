@@ -361,7 +361,17 @@ export default function Reception() {
         </div>
 
         <div style={{
-          marginTop: '32px', textAlign: 'center',
+          marginTop: '24px', textAlign: 'center',
+          fontFamily: "'Playfair Display', serif", fontSize: '14px',
+          letterSpacing: '2px',
+          background: 'linear-gradient(180deg, #e0e0e0 0%, #a8a8a8 50%, #d0d0d0 100%)',
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
+        }}>
+          @
+        </div>
+
+        <div style={{
+          marginTop: '24px', textAlign: 'center',
           fontFamily: "'Great Vibes', cursive", fontSize: '42px',
           background: 'linear-gradient(180deg, #ffffff 0%, #c8c8c8 40%, #e8e8e8 60%, #b0b0b0 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
@@ -371,7 +381,7 @@ export default function Reception() {
         </div>
 
         <div ref={dateRef} style={{
-          marginTop: '32px', textAlign: 'center',
+          marginTop: '24px', textAlign: 'center',
           fontFamily: "'Playfair Display', serif", fontSize: '18px',
           letterSpacing: '3px',
           background: 'linear-gradient(180deg, #e0e0e0 0%, #a8a8a8 50%, #d0d0d0 100%)',
@@ -382,7 +392,7 @@ export default function Reception() {
         </div>
 
         <div style={{
-          marginTop: '32px', textAlign: 'center',
+          marginTop: '24px', textAlign: 'center',
           fontFamily: "'Playfair Display', serif", fontSize: '18px',
           letterSpacing: '3px',
           background: 'linear-gradient(180deg, #e0e0e0 0%, #a8a8a8 50%, #d0d0d0 100%)',
