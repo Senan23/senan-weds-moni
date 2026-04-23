@@ -249,7 +249,7 @@ export default function Reception() {
           width: '100%', maxWidth: '500px'
         }}>
 
-          {/* Trapezium projection area — bottom edge touches reactor top */}
+          {/* Trapezium projection area — full white, matches canvas */}
           <div style={{
             position: 'relative',
             width: '100%',
@@ -259,12 +259,6 @@ export default function Reception() {
             background: '#ffffff',
             animation: 'hologram-flicker 3s linear infinite'
           }}>
-            {/* Opacity gradient overlay — fades top of trapezium into dark background */}
-            <div style={{
-              position: 'absolute', inset: 0,
-              background: 'linear-gradient(to top, transparent 0%, transparent 30%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0.7) 85%, rgba(0,0,0,0.92) 100%)',
-              pointerEvents: 'none', zIndex: 5
-            }} />
 
             {/* Canvas — same white background as trapezium */}
             <div style={{
@@ -279,128 +273,51 @@ export default function Reception() {
             </div>
           </div>
 
-          {/* Convergence point glow — bright illumination at reactor top */}
+          {/* Torch projector — emitting light upward into the canvas */}
           <div style={{
-            width: '80px', height: '14px',
-            background: 'radial-gradient(ellipse, rgba(100, 180, 255, 0.7) 0%, rgba(100, 180, 255, 0.3) 40%, transparent 70%)',
-            filter: 'blur(5px)',
-            marginTop: '-10px', zIndex: 3, pointerEvents: 'none'
-          }} />
-
-          {/* Arc Reactor sphere — Iron Man style hologram projector */}
-          <div style={{
-            marginTop: '-2px',
-            width: '60px', height: '60px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #1a1a2e 100%)',
-            boxShadow: '0 0 25px rgba(100, 180, 255, 0.5), 0 0 50px rgba(100, 180, 255, 0.2), 0 0 80px rgba(100, 180, 255, 0.1), 0 4px 12px rgba(0,0,0,0.6), inset 0 0 15px rgba(100, 180, 255, 0.15)',
             position: 'relative',
-            zIndex: 4,
-            border: '2px solid rgba(100, 180, 255, 0.3)'
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            marginTop: '-2px', zIndex: 4
           }}>
-            {/* Outer ring */}
+            {/* Flame/light emission at torch top */}
             <div style={{
-              position: 'absolute', inset: '3px',
-              borderRadius: '50%',
-              border: '2px solid rgba(100, 180, 255, 0.5)',
-              boxShadow: '0 0 6px rgba(100, 180, 255, 0.3), inset 0 0 6px rgba(100, 180, 255, 0.2)'
+              width: '24px', height: '20px',
+              background: 'radial-gradient(ellipse at center bottom, rgba(255,200,80,0.95) 0%, rgba(255,160,40,0.7) 30%, rgba(255,120,20,0.4) 55%, transparent 80%)',
+              borderRadius: '50% 50% 30% 30%',
+              filter: 'blur(2px)',
+              animation: 'hologram-flicker 3s linear infinite',
+              marginBottom: '-8px',
+              zIndex: 5
             }} />
-            {/* Middle ring */}
+            {/* Outer flame glow */}
             <div style={{
-              position: 'absolute', inset: '9px',
-              borderRadius: '50%',
-              border: '1.5px solid rgba(100, 180, 255, 0.4)',
-              boxShadow: '0 0 4px rgba(100, 180, 255, 0.2), inset 0 0 4px rgba(100, 180, 255, 0.15)'
-            }} />
-            {/* Inner ring */}
-            <div style={{
-              position: 'absolute', inset: '14px',
-              borderRadius: '50%',
-              border: '1px solid rgba(100, 180, 255, 0.35)',
-              boxShadow: 'inset 0 0 8px rgba(100, 180, 255, 0.25)'
-            }} />
-            {/* Core — bright blue center */}
-            <div style={{
-              position: 'absolute', top: '50%', left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '14px', height: '14px',
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(180,220,255,0.95) 0%, rgba(100,180,255,0.7) 40%, rgba(60,140,255,0.3) 70%, transparent 100%)',
-              boxShadow: '0 0 10px rgba(100, 180, 255, 0.8), 0 0 20px rgba(100, 180, 255, 0.4)',
-              animation: 'reception-star-twinkle 2s ease-in-out infinite'
-            }} />
-            {/* Reactor spoke — top */}
-            <div style={{
-              position: 'absolute', top: '7px', left: '50%',
+              position: 'absolute', top: '-10px', left: '50%',
               transform: 'translateX(-50%)',
-              width: '2px', height: '10px',
-              background: 'linear-gradient(to bottom, rgba(100,180,255,0.6), rgba(100,180,255,0.15))',
-              borderRadius: '1px'
+              width: '50px', height: '30px',
+              background: 'radial-gradient(ellipse, rgba(255,180,60,0.3) 0%, rgba(255,140,30,0.1) 50%, transparent 80%)',
+              filter: 'blur(6px)',
+              pointerEvents: 'none', zIndex: 4
             }} />
-            {/* Reactor spoke — bottom */}
+            {/* Torch handle — metallic cylinder */}
             <div style={{
-              position: 'absolute', bottom: '7px', left: '50%',
-              transform: 'translateX(-50%)',
-              width: '2px', height: '10px',
-              background: 'linear-gradient(to top, rgba(100,180,255,0.6), rgba(100,180,255,0.15))',
-              borderRadius: '1px'
-            }} />
-            {/* Reactor spoke — left */}
+              width: '18px', height: '40px',
+              background: 'linear-gradient(90deg, #3a3a3a 0%, #6a6a6a 20%, #8a8a8a 40%, #aaa 50%, #8a8a8a 60%, #6a6a6a 80%, #3a3a3a 100%)',
+              borderRadius: '3px 3px 6px 6px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.2)',
+              position: 'relative'
+            }}>
+              {/* Grip rings */}
+              <div style={{ position: 'absolute', top: '8px', left: '0', right: '0', height: '2px', background: 'rgba(255,255,255,0.15)', borderRadius: '1px' }} />
+              <div style={{ position: 'absolute', top: '14px', left: '0', right: '0', height: '2px', background: 'rgba(255,255,255,0.1)', borderRadius: '1px' }} />
+              <div style={{ position: 'absolute', top: '20px', left: '0', right: '0', height: '2px', background: 'rgba(255,255,255,0.15)', borderRadius: '1px' }} />
+              <div style={{ position: 'absolute', top: '26px', left: '0', right: '0', height: '2px', background: 'rgba(255,255,255,0.1)', borderRadius: '1px' }} />
+            </div>
+            {/* Torch base — wider bottom */}
             <div style={{
-              position: 'absolute', left: '7px', top: '50%',
-              transform: 'translateY(-50%)',
-              width: '10px', height: '2px',
-              background: 'linear-gradient(to right, rgba(100,180,255,0.6), rgba(100,180,255,0.15))',
-              borderRadius: '1px'
-            }} />
-            {/* Reactor spoke — right */}
-            <div style={{
-              position: 'absolute', right: '7px', top: '50%',
-              transform: 'translateY(-50%)',
-              width: '10px', height: '2px',
-              background: 'linear-gradient(to left, rgba(100,180,255,0.6), rgba(100,180,255,0.15))',
-              borderRadius: '1px'
-            }} />
-            {/* Reactor spoke — top-right diagonal */}
-            <div style={{
-              position: 'absolute', top: '10px', right: '10px',
-              width: '2px', height: '9px',
-              background: 'linear-gradient(to bottom, rgba(100,180,255,0.5), rgba(100,180,255,0.1))',
-              borderRadius: '1px',
-              transform: 'rotate(-45deg)'
-            }} />
-            {/* Reactor spoke — top-left diagonal */}
-            <div style={{
-              position: 'absolute', top: '10px', left: '10px',
-              width: '2px', height: '9px',
-              background: 'linear-gradient(to bottom, rgba(100,180,255,0.5), rgba(100,180,255,0.1))',
-              borderRadius: '1px',
-              transform: 'rotate(45deg)'
-            }} />
-            {/* Reactor spoke — bottom-right diagonal */}
-            <div style={{
-              position: 'absolute', bottom: '10px', right: '10px',
-              width: '2px', height: '9px',
-              background: 'linear-gradient(to top, rgba(100,180,255,0.5), rgba(100,180,255,0.1))',
-              borderRadius: '1px',
-              transform: 'rotate(45deg)'
-            }} />
-            {/* Reactor spoke — bottom-left diagonal */}
-            <div style={{
-              position: 'absolute', bottom: '10px', left: '10px',
-              width: '2px', height: '9px',
-              background: 'linear-gradient(to top, rgba(100,180,255,0.5), rgba(100,180,255,0.1))',
-              borderRadius: '1px',
-              transform: 'rotate(-45deg)'
-            }} />
-            {/* Upward beam from reactor top */}
-            <div style={{
-              position: 'absolute', top: '-12px', left: '50%',
-              transform: 'translateX(-50%)',
-              width: '8px', height: '14px',
-              background: 'linear-gradient(to top, rgba(100,180,255,0.6), transparent)',
-              borderRadius: '4px', filter: 'blur(3px)',
-              pointerEvents: 'none'
+              width: '26px', height: '8px',
+              background: 'linear-gradient(90deg, #2a2a2a 0%, #5a5a5a 30%, #7a7a7a 50%, #5a5a5a 70%, #2a2a2a 100%)',
+              borderRadius: '0 0 8px 8px',
+              boxShadow: '0 3px 6px rgba(0,0,0,0.4)'
             }} />
           </div>
         </div>
@@ -422,11 +339,11 @@ export default function Reception() {
         </div>
       </div>
 
-      {/* ═══ SECTION 2: "Come witness our forever" + date ═══ */}
+      {/* ═══ SECTION 2: "Come witness our forever" + date + Wedding Reception ═══ */}
       <div ref={witnessSectionRef} style={{
-        minHeight: '80vh', display: 'flex', flexDirection: 'column',
+        display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
-        padding: '60px 20px'
+        padding: '40px 20px'
       }}>
         <div ref={witnessRef} style={{ textAlign: 'center' }}>
           {'Come witness our forever'.split(' ').map((word, i) => (
@@ -444,25 +361,28 @@ export default function Reception() {
         </div>
 
         <div ref={dateRef} style={{
-          marginTop: '44px', textAlign: 'center',
+          marginTop: '32px', textAlign: 'center',
           fontFamily: "'Playfair Display', serif", fontSize: '18px',
           letterSpacing: '3px',
           background: 'linear-gradient(180deg, #e0e0e0 0%, #a8a8a8 50%, #d0d0d0 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
           opacity: 0
         }}>
-          ~ 29th May 2026 ~<br />~ 7 PM Onwards ~
+          ~ 29th May 2026 ~
         </div>
-      </div>
 
-      {/* "Wedding Reception" heading */}
-      <div style={{
-        textAlign: 'center',
-        padding: '0 20px',
-        marginTop: '-40px'
-      }}>
-        <div style={{ height: '20px' }} />
         <div style={{
+          marginTop: '32px', textAlign: 'center',
+          fontFamily: "'Playfair Display', serif", fontSize: '18px',
+          letterSpacing: '3px',
+          background: 'linear-gradient(180deg, #e0e0e0 0%, #a8a8a8 50%, #d0d0d0 100%)',
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
+        }}>
+          ~ 7 PM Onwards ~
+        </div>
+
+        <div style={{
+          marginTop: '32px', textAlign: 'center',
           fontFamily: "'Great Vibes', cursive", fontSize: '42px',
           background: 'linear-gradient(180deg, #ffffff 0%, #c8c8c8 40%, #e8e8e8 60%, #b0b0b0 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
@@ -470,15 +390,14 @@ export default function Reception() {
         }}>
           Wedding Reception
         </div>
-        <div style={{ height: '20px' }} />
       </div>
 
       {/* ═══ SECTION 3: Google Maps + 3D Palace ═══ */}
       <div ref={mapSectionRef} style={{
-        minHeight: '100vh', position: 'relative',
+        position: 'relative',
         display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
-        padding: '60px 20px'
+        padding: '40px 20px'
       }}>
         {/* Title */}
         <div style={{
