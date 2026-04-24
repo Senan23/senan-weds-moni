@@ -332,7 +332,7 @@ export default function Reception() {
             fontFamily: "'Montserrat', sans-serif", letterSpacing: '3px',
             textTransform: 'uppercase',
             textShadow: '0 0 8px rgba(200, 220, 255, 0.2)'
-          }}>Keep Swiping Down</span>
+          }}>Keep Scrolling</span>
           <svg width="20" height="20" viewBox="0 0 24 24" style={{ animation: 'scroll-bounce 1.5s ease-in-out infinite' }}>
             <path d="M7 10l5 5 5-5" fill="none" stroke="rgba(200, 220, 255, 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -346,7 +346,7 @@ export default function Reception() {
         padding: '40px 20px'
       }}>
         <div ref={witnessRef} style={{ textAlign: 'center' }}>
-          {'Come witness our forever'.split(' ').map((word, i) => (
+          {'Come witness the forever'.split(' ').map((word, i) => (
             <span key={i} className="witness-word" style={{
               display: 'inline-block', marginRight: '14px',
               fontFamily: "'Great Vibes', cursive", fontSize: '48px',
@@ -377,7 +377,7 @@ export default function Reception() {
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
           filter: 'drop-shadow(0 0 8px rgba(192,192,192,0.25))'
         }}>
-          Wedding Reception
+          Our Wedding Reception
         </div>
 
         <div ref={dateRef} style={{
@@ -411,7 +411,7 @@ export default function Reception() {
       }}>
         {/* Title */}
         <div style={{
-          fontFamily: "'Playfair Display', serif", fontSize: '16px',
+          fontFamily: "'Playfair Display', serif", fontSize: '16px', fontWeight: '700',
           letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '40px',
           background: 'linear-gradient(180deg, #e0e0e0, #a8a8a8, #d0d0d0)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
