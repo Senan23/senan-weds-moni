@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 
 /* ─────────────────────────────────────────────────────────────────────────────
    ADD YOUR PHOTOS HERE
@@ -39,17 +39,48 @@ const PAGE_TURN_MS  = 950;
 export default function Gallery() {
   const items = useMemo(() => shuffle(GALLERY_ITEMS), []);
   const N = items.length;
-  // Each "spread" shows 2 photos side-by-side (left + right). With an odd
-  // photo count the final spread's right page is blank, then navigation
-  // wraps back to the first spread.
-  const spreads = Math.ceil(N / 2);
+
+  // Track whether we're on a narrow viewport. On mobile the book renders as a
+  // single page (one photo at a time, full width); on desktop it renders as a
+  // two-page spread.
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 699px)').matches
+  );
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(max-width: 699px)');
+    const onChange = (e) => setIsMobile(e.matches);
+    if (mq.addEventListener) mq.addEventListener('change', onChange);
+    else mq.addListener(onChange); // Safari fallback
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener('change', onChange);
+      else mq.removeListener(onChange);
+    };
+  }, []);
+
+  const photosPerSpread = isMobile ? 1 : 2;
+  const spreads = Math.ceil(N / photosPerSpread);
 
   // 'closed'  → only cover visible
   // 'opening' → cover flipping animation in progress
   // 'open'    → spread visible, page-turn enabled
+  // 'closing' → cover closing animation in progress (after last photo)
   const [bookState, setBookState] = useState('closed');
   const [index, setIndex] = useState(0);
   const [flipping, setFlipping] = useState(null); // { dir: 'next'|'prev', from, to } | null
+
+  // Remap the index when the layout mode flips so the user stays on (or near)
+  // the photo they were viewing.
+  const prevIsMobile = useRef(isMobile);
+  useEffect(() => {
+    if (prevIsMobile.current === isMobile) return;
+    setIndex((prev) =>
+      isMobile
+        ? prev * 2                  // desktop spread → mobile photo index (left photo)
+        : Math.floor(prev / 2)      // mobile photo → desktop spread index
+    );
+    prevIsMobile.current = isMobile;
+  }, [isMobile]);
   const [fullscreen, setFullscreen] = useState(false);
 
   const openBook = useCallback(() => {
@@ -154,19 +185,28 @@ export default function Gallery() {
     return () => { document.body.style.overflow = prev; };
   }, [fullscreen]);
 
-  // Photos run in order across spreads: spread `i` shows items[i*2] on the
-  // left and items[i*2+1] on the right. The final spread's right page may be
-  // blank when the photo count is odd.
+  // Photos run in order across spreads. On desktop, spread `i` shows
+  // items[i*2] on the left and items[i*2+1] on the right (right may be blank
+  // for odd N). On mobile, each "spread" is a single photo (items[i]) shown
+  // full-width and there is no left page.
   //
   // While a page is mid-flip we tweak which photo each static page shows so
   // the animation lands seamlessly: the side that will be *revealed* by the
-  // flip already shows the destination photo (so it's there as the page
-  // lifts away), and the side that will be *covered* stays on the source
-  // photo (matching what the flipping page's back face lands on, then the
-  // static page updates to the destination as the flipping sheet is removed).
+  // flip already shows the destination photo (so it's there as the flipping
+  // page lifts away), and the side that will be *covered* stays on the
+  // source photo (matching what the flipping page's back face lands on,
+  // then the static page updates to the destination as the flipping sheet
+  // is removed).
   const photoAt = (i) => (i < N ? items[i] : null);
-  let leftPhoto, rightPhoto;
-  if (flipping) {
+  let leftPhoto = null;
+  let rightPhoto = null;
+  if (isMobile) {
+    // Single-photo book — only the "right" slot is used and it spans the
+    // full book width.
+    rightPhoto = flipping
+      ? photoAt(flipping.to)        // destination already underneath the flip
+      : photoAt(index);
+  } else if (flipping) {
     if (flipping.dir === 'next') {
       leftPhoto  = photoAt(flipping.from * 2);      // source left (covered by back face at end)
       rightPhoto = photoAt(flipping.to   * 2 + 1);  // destination right (revealed as flip lifts)
@@ -179,9 +219,11 @@ export default function Gallery() {
     rightPhoto = photoAt(index * 2 + 1);
   }
 
-  // Photo highlighted in fullscreen + counter (right page if present, else left).
+  // Photo highlighted in fullscreen + counter.
   const currentPhoto = rightPhoto || leftPhoto;
-  const currentPhotoNumber = rightPhoto ? index * 2 + 2 : index * 2 + 1;
+  const currentPhotoNumber = isMobile
+    ? index + 1
+    : (rightPhoto ? index * 2 + 2 : index * 2 + 1);
   const showSpread   = bookState !== 'closed';
 
   return (
@@ -189,13 +231,14 @@ export default function Gallery() {
       style={{
         position: 'relative',
         minHeight: '100vh',
-        padding: '110px 24px 80px',
+        padding: 'clamp(78px, 14vw, 110px) clamp(12px, 4vw, 24px) clamp(40px, 8vw, 80px)',
         overflow: 'hidden',
         background: '#ffffff',
       }}
     >
-      {/* Top-down working-desk backdrop: keyboard and mouse on a white desk */}
-      <DeskBackground />
+      {/* Top-down working-desk backdrop: keyboard and mouse on a white desk.
+          Hidden on mobile where there isn't room for them. */}
+      {!isMobile && <DeskBackground />}
 
 
       {/* ─── BOOK STAGE ──────────────────────────────────────────────────── */}
@@ -216,50 +259,59 @@ export default function Gallery() {
             width: 'min(880px, 94vw)',
             height: 'min(600px, 62vh)',
             transformStyle: 'preserve-3d',
-            transform: bookState === 'closed' ? 'translateX(-25%)' : 'translateX(0)',
+            transform:
+              bookState === 'closed' && !isMobile
+                ? 'translateX(-25%)'
+                : 'translateX(0)',
             transition: `transform ${COVER_OPEN_MS}ms cubic-bezier(0.6, 0.05, 0.3, 1)`,
           }}
         >
-          {/* Spread (left + right pages) */}
+          {/* Spread (left + right pages on desktop; single page on mobile) */}
           {showSpread && (
             <>
-              <PageBackground
-                side="left"
-                photo={leftPhoto}
-                onClick={() => setFullscreen(true)}
-                fadeIn={bookState === 'opening'}
-              />
+              {!isMobile && (
+                <PageBackground
+                  side="left"
+                  photo={leftPhoto}
+                  onClick={() => setFullscreen(true)}
+                  fadeIn={bookState === 'opening'}
+                />
+              )}
               <PageBackground
                 side="right"
                 photo={rightPhoto}
                 onClick={() => setFullscreen(true)}
                 fadeIn={bookState === 'opening'}
+                fullWidth={isMobile}
               />
-              {/* Spine */}
-              <div
-                style={{
-                  position: 'absolute',
-                  left: '50%',
-                  top: 0,
-                  bottom: 0,
-                  width: '4px',
-                  transform: 'translateX(-50%)',
-                  background:
-                    'linear-gradient(180deg, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.45) 12%, rgba(0,0,0,0.65) 50%, rgba(0,0,0,0.45) 88%, rgba(0,0,0,0.0) 100%)',
-                  boxShadow:
-                    'inset 1px 0 0 rgba(255,255,255,0.06), inset -1px 0 0 rgba(255,255,255,0.06)',
-                  pointerEvents: 'none',
-                  zIndex: 3,
-                }}
-              />
+              {/* Spine — only meaningful in the two-page layout */}
+              {!isMobile && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: 0,
+                    bottom: 0,
+                    width: '4px',
+                    transform: 'translateX(-50%)',
+                    background:
+                      'linear-gradient(180deg, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.45) 12%, rgba(0,0,0,0.65) 50%, rgba(0,0,0,0.45) 88%, rgba(0,0,0,0.0) 100%)',
+                    boxShadow:
+                      'inset 1px 0 0 rgba(255,255,255,0.06), inset -1px 0 0 rgba(255,255,255,0.06)',
+                    pointerEvents: 'none',
+                    zIndex: 3,
+                  }}
+                />
+              )}
             </>
           )}
 
-          {/* COVER — visible while closed or opening */}
+          {/* COVER — visible while closed or opening (or closing) */}
           {bookState !== 'open' && (
             <BookCover
               state={bookState}
               onOpen={openBook}
+              fullWidth={isMobile}
             />
           )}
 
@@ -267,15 +319,20 @@ export default function Gallery() {
           {flipping && bookState === 'open' && (
             <FlippingPage
               direction={flipping.dir}
+              fullWidth={isMobile}
               frontPhoto={
-                flipping.dir === 'next'
-                  ? photoAt(flipping.from * 2 + 1)
-                  : photoAt(flipping.from * 2)
+                isMobile
+                  ? photoAt(flipping.from)
+                  : (flipping.dir === 'next'
+                      ? photoAt(flipping.from * 2 + 1)
+                      : photoAt(flipping.from * 2))
               }
               backPhoto={
-                flipping.dir === 'next'
-                  ? photoAt(flipping.to * 2)
-                  : photoAt(flipping.to * 2 + 1)
+                isMobile
+                  ? photoAt(flipping.to)
+                  : (flipping.dir === 'next'
+                      ? photoAt(flipping.to * 2)
+                      : photoAt(flipping.to * 2 + 1))
               }
             />
           )}
@@ -353,7 +410,7 @@ export default function Gallery() {
 
 /* ─── BOOK COVER ─────────────────────────────────────────────────────────── */
 
-function BookCover({ state, onOpen }) {
+function BookCover({ state, onOpen, fullWidth }) {
   const isOpening = state === 'opening';
   const isClosing = state === 'closing';
   return (
@@ -363,9 +420,9 @@ function BookCover({ state, onOpen }) {
       aria-label="Open the book"
       style={{
         position: 'absolute',
-        left: '50%',
+        left: fullWidth ? '0%' : '50%',
         top: 0,
-        width: '50%',
+        width: fullWidth ? '100%' : '50%',
         height: '100%',
         padding: 0,
         border: 'none',
@@ -528,22 +585,26 @@ function CoverFace() {
 
 /* ─── PAGE BACKGROUND (static left/right pages) ──────────────────────────── */
 
-function PageBackground({ side, photo, onClick, fadeIn }) {
+function PageBackground({ side, photo, onClick, fadeIn, fullWidth }) {
   const isLeft = side === 'left';
   return (
     <div
       style={{
         position: 'absolute',
         top: 0,
-        left: isLeft ? '0%' : '50%',
-        width: '50%',
+        left: fullWidth ? '0%' : (isLeft ? '0%' : '50%'),
+        width: fullWidth ? '100%' : '50%',
         height: '100%',
-        borderRadius: isLeft ? '12px 2px 2px 12px' : '2px 12px 12px 2px',
+        borderRadius: fullWidth
+          ? '12px'
+          : (isLeft ? '12px 2px 2px 12px' : '2px 12px 12px 2px'),
         overflow: 'hidden',
-        background: `
-          linear-gradient(${isLeft ? '90deg' : '270deg'}, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.0) 18%),
-          linear-gradient(135deg, #f5ecd6 0%, #ecdfb8 35%, #f7eccf 70%, #e6d8a8 100%)
-        `,
+        background: fullWidth
+          ? 'linear-gradient(135deg, #f5ecd6 0%, #ecdfb8 35%, #f7eccf 70%, #e6d8a8 100%)'
+          : `
+              linear-gradient(${isLeft ? '90deg' : '270deg'}, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.0) 18%),
+              linear-gradient(135deg, #f5ecd6 0%, #ecdfb8 35%, #f7eccf 70%, #e6d8a8 100%)
+            `,
         boxShadow:
           'inset 0 0 30px rgba(0,0,0,0.18), 0 18px 50px rgba(0,0,0,0.45)',
         animation: fadeIn ? `gallery-spread-fade ${COVER_OPEN_MS}ms ease forwards` : 'none',
@@ -636,26 +697,28 @@ function PhotoFrame({ photo, onClick }) {
 
 /* ─── FLIPPING PAGE OVERLAY ──────────────────────────────────────────────── */
 
-function FlippingPage({ direction, frontPhoto, backPhoto }) {
+function FlippingPage({ direction, frontPhoto, backPhoto, fullWidth }) {
   const isNext = direction === 'next';
   return (
     <div
       style={{
         position: 'absolute',
         top: 0,
-        left: isNext ? '50%' : '0%',
-        width: '50%',
+        left: fullWidth ? '0%' : (isNext ? '50%' : '0%'),
+        width: fullWidth ? '100%' : '50%',
         height: '100%',
         transformStyle: 'preserve-3d',
         transformOrigin: isNext ? 'left center' : 'right center',
         animation: `${isNext ? 'gallery-page-turn-next' : 'gallery-page-turn-prev'} ${PAGE_TURN_MS}ms cubic-bezier(0.45, 0, 0.3, 1) forwards`,
         zIndex: 5,
-        borderRadius: isNext ? '2px 12px 12px 2px' : '12px 2px 2px 12px',
+        borderRadius: fullWidth
+          ? '12px'
+          : (isNext ? '2px 12px 12px 2px' : '12px 2px 2px 12px'),
         pointerEvents: 'none',
       }}
     >
       {/* Front face (visible at start) */}
-      <FlipFace photo={frontPhoto} side={isNext ? 'right' : 'left'} />
+      <FlipFace photo={frontPhoto} side={isNext ? 'right' : 'left'} fullWidth={fullWidth} />
       {/* Back face (visible after 90°) */}
       <div
         style={{
@@ -665,13 +728,13 @@ function FlippingPage({ direction, frontPhoto, backPhoto }) {
           backfaceVisibility: 'hidden',
         }}
       >
-        <FlipFace photo={backPhoto} side={isNext ? 'left' : 'right'} />
+        <FlipFace photo={backPhoto} side={isNext ? 'left' : 'right'} fullWidth={fullWidth} />
       </div>
     </div>
   );
 }
 
-function FlipFace({ photo, side }) {
+function FlipFace({ photo, side, fullWidth }) {
   const isLeft = side === 'left';
   return (
     <div
@@ -679,12 +742,16 @@ function FlipFace({ photo, side }) {
         position: 'absolute',
         inset: 0,
         backfaceVisibility: 'hidden',
-        borderRadius: isLeft ? '12px 2px 2px 12px' : '2px 12px 12px 2px',
+        borderRadius: fullWidth
+          ? '12px'
+          : (isLeft ? '12px 2px 2px 12px' : '2px 12px 12px 2px'),
         overflow: 'visible',
-        background: `
-          linear-gradient(${isLeft ? '90deg' : '270deg'}, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.0) 18%),
-          linear-gradient(135deg, #f5ecd6 0%, #ecdfb8 35%, #f7eccf 70%, #e6d8a8 100%)
-        `,
+        background: fullWidth
+          ? 'linear-gradient(135deg, #f5ecd6 0%, #ecdfb8 35%, #f7eccf 70%, #e6d8a8 100%)'
+          : `
+              linear-gradient(${isLeft ? '90deg' : '270deg'}, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.0) 18%),
+              linear-gradient(135deg, #f5ecd6 0%, #ecdfb8 35%, #f7eccf 70%, #e6d8a8 100%)
+            `,
         boxShadow: 'inset 0 0 30px rgba(0,0,0,0.18)',
       }}
     >
