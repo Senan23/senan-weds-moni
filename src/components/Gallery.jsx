@@ -149,6 +149,11 @@ export default function Gallery() {
         40%  { opacity: 0; }
         100% { opacity: 1; }
       }
+      @keyframes gallery-tape-in {
+        0%   { opacity: 0; transform: scale(0.55); }
+        60%  { opacity: 0.95; transform: scale(1.06); }
+        100% { opacity: 0.9; transform: scale(1); }
+      }
     `;
     document.head.appendChild(style);
     return () => { document.head.removeChild(style); };
@@ -1009,6 +1014,9 @@ function PhotoTape({ corner }) {
   const isLeft = corner.endsWith('l');
   // tl & br tilt one way; tr & bl the other
   const rotation = isTop === isLeft ? -42 : 42;
+  // stagger so the four corners appear in sequence: tl → tr → bl → br
+  const delayMap = { tl: 180, tr: 280, bl: 380, br: 480 };
+  const delay = delayMap[corner] ?? 200;
   return (
     <div
       aria-hidden="true"
@@ -1021,16 +1029,25 @@ function PhotoTape({ corner }) {
         left:   isLeft  ? '-14px' : 'auto',
         right:  !isLeft ? '-14px' : 'auto',
         transformOrigin: 'center',
-        transform: `rotate(${rotation}deg)`,
-        background:
-          'linear-gradient(135deg, rgba(255,250,205,0.82) 0%, rgba(255,255,255,0.72) 45%, rgba(255,240,170,0.82) 100%)',
-        boxShadow:
-          '0 2px 5px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.55)',
-        backdropFilter: 'blur(1px)',
+        // wrapper handles the entrance scale/opacity; inner div carries the rotation
+        opacity: 0,
+        animation: `gallery-tape-in 520ms cubic-bezier(0.34, 1.3, 0.4, 1) ${delay}ms both`,
         pointerEvents: 'none',
         zIndex: 6,
-        opacity: 0.9,
       }}
-    />
+    >
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          transform: `rotate(${rotation}deg)`,
+          background:
+            'linear-gradient(135deg, rgba(255,250,205,0.82) 0%, rgba(255,255,255,0.72) 45%, rgba(255,240,170,0.82) 100%)',
+          boxShadow:
+            '0 2px 5px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.55)',
+          backdropFilter: 'blur(1px)',
+        }}
+      />
+    </div>
   );
 }
